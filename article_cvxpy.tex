@@ -115,18 +115,18 @@
 Convexity is an important property in optimisation. This is because if a problem is convex then the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering has driven the development of software packages, such as \texttt{cvxpy}.
 
 Here we show that an interesting problem in communications not only has a convex formulation (as shown in \cite{cvxpybook}), but can be easily implemented computationally using the \texttt{cvxpy} Python module. The ease of implementation makes \texttt{cvxpy} an invaluable tool for both students and researchers in many areas of science and engineering.
-\subsection{Convex Sets and Functions}
+\subsection{Convex Functions}
 
-If a set $C$ is \textit{convex}, then for any two points $x,y\in C$, any point $z$ along the $x,y$ line must also $\in C$ \cite[p.23]{cvxpybook}. More formally, for $x,y\in C$ and $\theta\in [0,1]$:
-\begin{align}
-\theta x + (1-\theta)y\in C.
-\end{align}
+%If a set $C$ is \textit{convex}, then for any two points $x,y\in C$, any point $z$ along the $x,y$ line must also $\in C$ \cite[p.23]{cvxpybook}. More formally, for $x,y\in C$ and $\theta\in [0,1]$:
+%\begin{align}
+%\theta x + (1-\theta)y\in C.
+%\end{align}
 
-In terms of a function $f$, where $f:\mathbb{R}^n \rightarrow \mathbb{R}$. For $f$ to be \textit{convex} then the domain of $f$, $\textbf{dom} f$, must be a convex set and $\forall x,y\in \textbf{dom} f$ \cite[p.67]{cvxpybook}:
+A function $f$, where $f:\mathbb{R}^n \rightarrow \mathbb{R}$, is \textit{convex} if $\forall x,y\in \textbf{dom} f$ and $0 \leq \theta \leq 1$ \cite[p.67]{cvxpybook}:
 \begin{align}
 f(\theta x + (1-\theta)y) \leq \theta f(x)+(1-\theta)f(y).
 \end{align}
-This means that the function is less than or equal to linear. This can be seen graphically in Fig~\ref{fig:convex}. A concave function can be made convex by the operation $f\to-f$.
+This means that the function is less than or equal to linear, as shown in Fig~\ref{fig:convex}. %A concave function can be made convex by the operation $f\to-f$.
 \begin{figure}
 \includegraphics[width=0.9\linewidth]{convex_function.pdf}
 \caption{\label{fig:convex}A chord showing convexity of the function $x^4$.} 
@@ -139,19 +139,17 @@ A \textit{convex optimisation problem} has three components:
 \item $m$ convex \textit{inequality constraint functions} $f_i(x)$,
 \item $k$ convex \textit{equality constraint functions} $g_j(x)$, 
 \end{itemize}
-where $f,g: \mathbb{R}^n \rightarrow \mathbb{R}$ \cite[p.141]{cvxpybook}. We seek an optimum $x^*\in \mathbb{R}^n$, where $f_0(x^*)$ is a minimum. Formally the problem is defined as:
+where $f,g: \mathbb{R}^n \rightarrow \mathbb{R}$ \cite[p.141]{cvxpybook}. We seek an optimum, $x^*\in \mathbb{R}^n$, where $f_0(x^*)$ is a minimum. Formally the problem is defined as:
 \begin{align} \label{eq:cvxdefn}
 &\text{minimise } && f_0(x) & \nonumber &\\
 &\text{subject to } && f_i(x) \leq 0,\quad & i\in \{1,..,m\}\nonumber &\\
 & && g_{j}(x)=0,\quad & j\in \{1,...,k\} &.
 \end{align}
 
-Any local optimum $x^*$ for a convex optimisation problem is also a global optimum \cite[pp.138-139]{cvxpybook}. An optimum of a convex optimisation problem may not be unique: consider the convex function $f(x) = \text{const}$, which has line of optima $x^*$.
+Any local optimum $x^*$ for a convex optimisation problem is also a global optimum \cite[pp.138-139]{cvxpybook}, however an optimum may not be unique.
 
 \subsection{Disciplined convex programming}
-\texttt{cvxpy} is a symbolic programming language for \textit{Python} developed by Diamond and Boyd at Stanford\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. If \texttt{cvxpy} finds that the function is convex, then interior point methods can be safely applied, which are guaranteed to find the optimal solution.
-
-To implement DCP, the \texttt{cvxpy} package has a set of predefined functions in classes containing their curvature and sign. By only allowing certain operations with these known functions, general composition theorems from convex analysis can be applied to determine the convexity of the more complex expression. See Fig. \ref{fig:DCP}.
+\texttt{cvxpy} is a symbolic programming module for \textit{Python} developed at Stanford\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. To implement DCP, \texttt{cvxpy} has a set of predefined functions in classes containing their curvature and sign. By only allowing certain operations with these known functions, general composition theorems from convex analysis can be applied to determine the convexity of the more complex expression. See Fig. \ref{fig:DCP}.  If this is the case, then interior point methods guarantee an optimal solution.
 
 \begin{figure}
 \includegraphics[width=0.7\linewidth]{DCP.pdf}
