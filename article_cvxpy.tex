@@ -163,44 +163,6 @@ The set of available DCP functions do not define the complete set of convex func
 We will show how \texttt{cvxpy} can be used simply to test a variety of optimisation problems, as a powerful easy-to-use tool for gaining insight into real-world problems.
 
 \section{Real world applications}
-\subsection{Water filling}
-\begin{figure}
-\includegraphics[width=1.0\linewidth]{water_filling_plot.pdf}
-\caption{\label{fig:waterfilling}Water filling solution for three channels.}
-\end{figure}
-
-Convex optimisation can be used to solve the classic water filling problem.  In communications, this is where a total power $P$ must be assigned to $n$ different communication channels, with the objective of maximising the total communication rate.  The communication rate of the the $i$th channel, $r_i$, is given by \cite[p.245]{cvxpybook},
-
-\begin{align}
-r_i = \log(x_i+\alpha_i),
-\end{align}
-where $x_i$ is the power allocated to channel $i$ and $\alpha_i$ represents the floor above the baseline at which power can be added to the channel.  From Fig. \ref{fig:waterfilling}, we can see how this is analogous to filling an uneven basin to a constant level. 
-
-%Consider a bounded area of contiguous, equal-area patches $i$ of different elevations $\alpha_i$ (Fig.~\ref{fig:waterfilling}). The area is flooded to a certain level. Find the optimal height $x^{*}_i$ that uses a total amount of water of 1---this describes the famous `water filling' (or `water pouring') problem. It is also common to information theory, formulated by allocating power to communication channels, where each transmits at power $p_i$ and bandwidth $\alpha_i$, with channel rate $\log(\alpha_i+p_i)$\cite[p.245]{cvxpybook}.
-
-The optimisation problem is then \cite{cvxpybook}:
-\begin{align}
-& \text{minimise} 
-& & f_{0}(\textbf{x})=-\sum^{n}_{i=1}\log(\alpha_{i}+x_{i}),\quad\boldsymbol{\alpha} \succ \textbf{0}\nonumber\\
-& \text{subject to} 
-&& \textbf{x} \succeq \textbf{0} , \nonumber\\& && \sum^{n}_{i=1}x_{i}=\mathds{1}^{T}\textbf{x}=P
-\end{align}
-where symbols $\succ$, $\succeq$ denote elementwise inequalities between vectors or matrices. 
-
-This is a convex problem since $f_0(\textbf{x})$ has positive curvature within its domain, and the inequality and equality constraints are convex. 
-
-\subsubsection{Example \texttt{cvxpy} code in Python}
-To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below:
-\lstinputlisting[language=Python]{waterfilling.py}
-
-\subsubsection{Computational complexity}
-\texttt{cvxpy} employs different solvers for each problem and so they have different computational complexities; these were assessed by averaging the runtime over many runs.\\ 
-In the case of water filling, for problem sizes up to 1000 channels, the computational time scaled linearly, Fig.~\ref{fig:waterfillingcomputcomplex}.Given that we have $n$ items in this problem and we apply the objective function to each channel independently, a computational complexity of $O(n)$ should be expected.
-
-\begin{figure}
-\includegraphics[width=0.9\linewidth]{water_filling_1000runs_1000buckets.pdf}
-\caption{\label{fig:waterfillingcomputcomplex}Linear plot of computation time (wall time) of water filling against problem size, for 1000 runs.}
-\end{figure}
 
 \subsection{Maximising channel capacity}
 
@@ -245,6 +207,8 @@ How can we minimise the total power consumption $P$ of $n$ transmitters each wit
 				& \quad &&p_j \geq 0\\
 				& \quad &&\gamma_i \geq \gamma_0&&
 		\end{align*}
+(where symbols $\succ$, $\succeq$ denote elementwise inequalities between vectors or matrices.)
+
 The desired signal to receiver $i$ is denoted by $S_i = G_{ik}p_k$, while the interference to $i$ is $I_i = \sum_{j\neq k}G_{ij}p_j$. However DCP does not allow division of the optimisation variable $p_i$ so  
 \begin{equation*}
   \gamma_i \geq \gamma_0\Longleftrightarrow  \frac{S_i}{\sigma_i + I_i}\geq \gamma_0, \quad \forall i
@@ -263,7 +227,6 @@ The signal-to-interference-plus-noise ratio (SINR) is the strength of the desire
 \gamma_i = \frac{G_{ik}p_k}{\sigma_i+\sum_{j\neq k}G_{ij}p_j}
 =\frac{S_i}{\sigma_i+I_i}.
 \end{equation}
-
 In a physical context, the path gain from transmitter $j$ to receiver $i$ will depend on the distance, $d_{ij}$ between them.  Assuming isotropic propagation from each transmitter, the fraction of power from $j$ that reaches $i$ is given by,
 
 \begin{equation}
@@ -292,8 +255,7 @@ where $\alpha$ is the pathloss coefficient, $k$ is a proportionality constant sp
 \end{figure}
 
 \subsubsection{Example code}
-The \texttt{cvxpy} implementation is shown below.
-\lstinputlisting[language=Python]{minimisePgivenSINR.py}
+To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below: \lstinputlisting[language=Python]{minimisePgivenSINR.py}
 
 \subsubsection{Computational Complexity}
 
