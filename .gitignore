@@ -1,0 +1,7 @@
+# ignore files created by texmaker
+*.pdf
+*.aux
+*.log
+*.out
+*.gz
+*.sta
