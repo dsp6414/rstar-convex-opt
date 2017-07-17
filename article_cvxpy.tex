@@ -127,7 +127,7 @@ A function $f$, where $f:\mathbb{R}^n \rightarrow \mathbb{R}$, is \textit{convex
 f(\theta x + (1-\theta)y) \leq \theta f(x)+(1-\theta)f(y).
 \end{align}
 This means that the function is less than or equal to linear, as shown in Fig~\ref{fig:convex}. %A concave function can be made convex by the operation $f\to-f$.
-\begin{figure}
+\begin{figure}[h!]
 \includegraphics[width=0.9\linewidth]{convex_function.pdf}
 \caption{\label{fig:convex}A chord showing convexity of the function $x^4$.} 
 \end{figure}
@@ -149,22 +149,17 @@ where $f,g: \mathbb{R}^n \rightarrow \mathbb{R}$ \cite[p.141]{cvxpybook}. We see
 Any local optimum $x^*$ for a convex optimisation problem is also a global optimum \cite[pp.138-139]{cvxpybook}, however an optimum may not be unique.
 
 \subsection{Disciplined convex programming}
-\texttt{cvxpy} is a symbolic programming module for \textit{Python} developed at Stanford\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis. See Fig. \ref{fig:DCP}.  If this is the case, then interior point methods guarantee an optimal solution.
-
-\begin{figure}
-\includegraphics[width=0.7\linewidth]{DCP.pdf}
-\caption{\label{fig:DCP}Application of DCP rules to a set of \texttt{cvxpy} functions, where $\text{entr}(x)=-x\log(x)$.  Figure adapted from the Stanford DCP Analyzer \cite{dcp}.}
-\end{figure}
+\texttt{cvxpy} is a symbolic programming module for \textit{Python} developed at Stanford\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis. If this is the case, then interior point methods guarantee an optimal solution.
 
 \section{Example: power minimisation in communications}
-How can we minimise the total power consumption $P$ of $n$ transmitters each with power $p_i$, yet achieve a minimum SINR $\gamma_0$ for all $m$ receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and maximum power value that any transmitter can reach $P_{\text{max}}$:
-		\begin{align*}
-				&\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
-				&\text{subject to} \quad &&p_j \leq P_{\max}\\
-				& \quad &&p_j \geq 0\\
-				& \quad &&\gamma_i \geq \gamma_0&&
-		\end{align*}
-(where symbols $\succ$, $\succeq$ denote elementwise inequalities between vectors or matrices.)
+For a real world example consider a system of $n$ transmitters and $m$ receivers distributed in $2D$ Euclidian space. Each of the transmitters has power $p_i$. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and maximum power value that any transmitter can reach $P_{\text{max}}$:
+\begin{align*}
+&\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
+&\text{subject to} \quad &&p_j \leq P_{\max}\\
+& \quad &&p_j \geq 0\\
+& \quad &&\gamma_i \geq \gamma_0&&
+\end{align*}
+where symbols $\succ$, $\succeq$ denote element-wise inequalities between vectors or matrices.
 
 The desired signal to receiver $i$ is denoted by $S_i = G_{ik}p_k$, while the interference to $i$ is $I_i = \sum_{j\neq k}G_{ij}p_j$. However DCP does not allow division of the optimisation variable $p_i$ so  
 \begin{equation*}
@@ -173,7 +168,8 @@ The desired signal to receiver $i$ is denoted by $S_i = G_{ik}p_k$, while the in
 was rearranged to:
 \begin{equation*}
 S_i-\gamma_0(\sigma_i + I_i)\geq 0, \quad \forall i
-\end{equation*} which is DCP.
+\end{equation*} which is affine, and hence DCP.
+
 \subsection{Path gain}
 The path gain $G_{ij}$ represents the proportion of power that reaches receiver $i$ from transmitter $j$. Supposing that the desired signal to receiver $i$ is from transmitter $k$, the power received is,
 \begin{equation}
@@ -190,7 +186,7 @@ In a physical context, the path gain from transmitter $j$ to receiver $i$ will d
 G_{ij} = k_i/d_{ij}^\alpha
 \end{equation}
 
-where $\alpha$ is the pathloss coefficient, $k$ is a proportionality constant specific to the receiver $i$.  For free space $\alpha = 2$, while for an urban environment $\alpha \sim 3.5$.  Further physical complexities, such as the stochastic effects from Rayleigh fading can be easily implemented.
+where $\alpha$ is the pathloss coefficient, $k$ is a proportionality constant specific to the receiver $i$.  For free space $\alpha = 2$, while for an urban environment $\alpha \sim 3.5$ \textbf{CITE THIS}.  Further physical complexities, such as the stochastic effects from Rayleigh fading can be easily implemented.
 
 \begin{figure}[H]
 \centering
@@ -214,12 +210,12 @@ where $\alpha$ is the pathloss coefficient, $k$ is a proportionality constant sp
 \subsection{Example code}
 To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below: \lstinputlisting[language=Python]{minimisePgivenSINR.py}
 
-\section{Conclusions}
-This article has shown that a well-known convex problem in communications can be written in a DCP format, meaning that they can be easily implemented in \texttt{cvxpy}.
+\section{Outlook}
+The authors hope that this article shows the ease with the which \texttt{cvxpy} can be brought to bare on simple ``toy'' problems of real world relevance. We also believe that this is an invaluable resource for researchers wanting test the applicability of convex optimization in new fields. 
 
-Our example code demonstrates a key strength of \texttt{cvxpy}, which is that the translation from the mathematical description to python code is straightforward and clear.  Conversely, one can also infer the mathematical problem from reading the code.
+The module could also be easily incorporated into a course on optimization, providing students with a simple environment with which to implement techniques for convex optimization.
 
-While all problems that can be written in DCP are convex, not all convex problems of interest can be written in DCP.  Over time, the library of available DCP functions in \texttt{cvxpy} has grown, increasing the scope of convex optimisation problems that \texttt{cvxpy} can solve.  This expansion of scope of \texttt{cvxpy} is ongoing, with version 1.0 under development and expected in the near future.
+%While all problems that can be written in DCP are convex, not all convex problems of interest can be written in DCP.  Over time, the library of available DCP functions in \texttt{cvxpy} has grown, increasing the scope of convex optimisation problems that \texttt{cvxpy} can solve.  This expansion of scope of \texttt{cvxpy} is ongoing, with version 1.0 under development and expected in the near future.
 
 %\section{Further Work}
 %While many problems are convex, others fall into a similar category of being \textit{quasi-convex}.  A quasi-convex function $f$ is one for which $\textbf{dom} f$ and every sublevel set of $f$ is convex.  An example of this is shown in Figure [?].  Quasi-convex problems cannot be solved directly using convex optimisation solvers, however the feasibility of a sublevel set can be checked.  This feasibility check can be used as a bisection method to find the solution.  A more thorough discussion of quasi-convex problems can be found in \cite{cvxpybook}chapter?.
