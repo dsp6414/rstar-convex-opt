@@ -5,6 +5,11 @@ Steven Boyd and L~Vandenberghe.
 \newblock {\em {Convex Optimization}}.
 \newblock Cambridge University Press, 2004.
 
+\bibitem{dcp}
+S.~Diamond.
+\newblock Stanford dcp analyzer.
+\newblock \url{http://dcp.stanford.edu/analyzer}, 2013.
+
 \bibitem{cvxpy}
 S~Diamond and S~Boyd.
 \newblock {CVXPY}: A {P}ython-embedded modeling language for convex
@@ -16,5 +21,10 @@ Masaharu Hata.
 \newblock Empirical formula for propagation loss in land mobile radio services.
 \newblock {\em Vehicular Technology, IEEE Transactions on}, 29(3):317--325,
   1980.
+
+\bibitem{shannon1949}
+Claude~E. Shannon and Warren Weaver.
+\newblock {\em The mathematical theory of communication}.
+\newblock University of Illinois Press, 1949.
 
 \end{thebibliography}

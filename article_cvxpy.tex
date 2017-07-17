@@ -149,10 +149,10 @@ where $f,g: \mathbb{R}^n \rightarrow \mathbb{R}$ \cite[p.141]{cvxpybook}. We see
 Any local optimum $x^*$ for a convex optimisation problem is also a global optimum \cite[pp.138-139]{cvxpybook}, however an optimum may not be unique.
 
 \subsection{Disciplined convex programming}
-\texttt{cvxpy} is a symbolic programming module for \textit{Python} developed at Stanford\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis. If this is the case, then interior point methods guarantee an optimal solution.
+\texttt{cvxpy} is a symbolic programming module for \textit{Python} developed at Stanford \cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If this is the case, then interior point methods guarantee an optimal solution.
 
 \section{Example: power minimisation in communications}
-For a real world example consider a system of $n$ transmitters and $m$ receivers distributed in $2$D Euclidian space. Each of the transmitters has power $p_i$. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and maximum power value that any transmitter can reach $P_{\text{max}}$:
+For a real world example consider a system of $n$ transmitters and $m$ receivers distributed in $2$D Euclidian space where each of the transmitters has power $p_i$ \cite{shannon1949}. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and maximum power value that any transmitter can reach $P_{\text{max}}$:
 \begin{align*}
 &\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
 &\text{subject to} \quad &&p_j \leq P_{\max}\\
@@ -211,7 +211,7 @@ where $\alpha$ is the pathloss coefficient, $k$ is a proportionality constant sp
 To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below: \lstinputlisting[language=Python]{minimisePgivenSINR.py}
 
 \section{Outlook}
-The authors hope that this article shows the ease with the which \texttt{cvxpy} can be brought to bare on simple ``toy'' problems of real world relevance. We also believe that this is an invaluable resource for researchers wanting test the applicability of convex optimization in new fields. 
+The authors hope that this article shows the ease with the which \texttt{cvxpy} can be brought to bare on simple ``toy'' problems of real world relevance. We believe that this is an invaluable resource for researchers wanting test the applicability of convex optimization in new fields. 
 
 The module could also be easily incorporated into a course on optimization, providing students with a simple environment with which to implement techniques for convex optimization.
 
