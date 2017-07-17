@@ -1,7 +1,11 @@
 # ignore files created by texmaker
-*.pdf
 *.aux
 *.log
 *.out
 *.gz
 *.sta
+*.bbl
+*.blg
+
+# ignore pyc files should any be generated
+*.pyc
