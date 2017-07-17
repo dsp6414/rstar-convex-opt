@@ -162,44 +162,7 @@ The set of available DCP functions do not define the complete set of convex func
 
 We will show how \texttt{cvxpy} can be used simply to test a variety of optimisation problems, as a powerful easy-to-use tool for gaining insight into real-world problems.
 
-\section{Real world applications}
-
-\subsection{Maximising channel capacity}
-
-Convex optimization can be used to find the channel capacity $C$ of a discrete memoryless channel. Consider a communication channel with input $X(t)\in\{1,2,...,n\}$ and output $Y(t)\in\{1,2,...m\}$. This means that the random variables $X$ and $Y$ can take $n$ and $m$ different values respectively.
-
-In a discrete memoryless channel, the relation between the input and the output is given by the transition probability,
-\begin{equation}
-p_{ij} = \mathbb{P}(Y(t)=i|X(t)=j),
-\end{equation} where these transition probabilities form the channel transition matrix $P$, with $P \in \mathbb{R}^{m\times n}$.  Assume that $X$ has a probability distribution denoted by $x\in\mathbb{R}^n$, meaning that,
-\begin{equation}
-x_j = \mathbb{P}(X(t) = j), \quad j=\{1,...,n\}.
-\end{equation}
-From Shannon \cite{shannon1949}, the channel capacity is given by the maximum possible mutual information, $I$, between $X$ and $Y$,
-\begin{align}
-C &= \sup_x I(X;Y), \quad \text{where},\\
-I(X;Y) &= -\sum_{i=1}^{m}y_i\log_2 y_i+\sum_{j=1}^{n}\sum_{i=1}^{m}x_j p_{ij}\log_2 p_{ij}.
-\end{align}
-
-Given that $x\log x$ is convex for $x\geq 0$, we can formulate this as a convex optimisation problem,
-\begin{align}
-\text{minimise} \quad -I(X;Y), \\
-\text{subject to} \quad \sum_{i=1}^{n}x_i = 1, \quad x \succeq 0.
-\end{align} Here the constraints arise from $x$ describing a probability.
-
-\subsubsection{Example \texttt{cvxpy} code}
-Due to the built-in entropy function in \texttt{cvxpy}, \texttt{cvx.entr()}, the channel capacity problem is easy to write in DCP.
-
-\lstinputlisting[language=Python]{channel_capacity.py}
-
-\subsubsection{Computational complexity}
-The computational complexity of the channel capacity problem follows a power law in \texttt{cvxpy}.  For $n$ up to 1000, the complexity is of order $\sim O(n^{2.5})$, Fig.~\ref{fig:channel_capacity_complexity}. Given that we are applying matrix multiplication to the power vector $\textbf{p}$, a complexity of at least $n^2$ would be expected.
-\begin{figure}
-\includegraphics[width=0.9\linewidth]{channel_capacity_complexity.pdf}
-\caption{\label{fig:channel_capacity_complexity}Log-log plot of computation time (wall time) of channel capacity against problem size, for 1000 runs.}
-\end{figure}
-
-\subsection{Minimum power for a given SINR}
+\section{Minimum power for a given SINR}
 How can we minimise the total power consumption $P$ of $n$ transmitters each with power $p_i$, yet achieve a minimum SINR $\gamma_0$ for all $m$ receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and maximum power value that any transmitter can reach $P_{\text{max}}$:
 		\begin{align*}
 				&\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
@@ -217,7 +180,7 @@ was rearranged to:
 \begin{equation*}
 S_i-\gamma_0(\sigma_i + I_i)\geq 0, \quad \forall i
 \end{equation*} which is DCP.
-\subsubsection{Path gain}
+\subsection{Path gain}
 The path gain $G_{ij}$ represents the proportion of power that reaches receiver $i$ from transmitter $j$. Supposing that the desired signal to receiver $i$ is from transmitter $k$, the power received is,
 \begin{equation}
 p_{ik}^{\text{rec}} = G_{ik}p_k.
@@ -254,24 +217,13 @@ where $\alpha$ is the pathloss coefficient, $k$ is a proportionality constant sp
 \caption{Path lengths between receiver $i$ and transmitters $j$ and $k$.}\label{fig:spatial_diagram}
 \end{figure}
 
-\subsubsection{Example code}
+\subsection{Example code}
 To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below: \lstinputlisting[language=Python]{minimisePgivenSINR.py}
 
-\subsubsection{Computational Complexity}
-
-\begin{figure}[H]
-\includegraphics[width=0.9\linewidth]{magazineMinSINR.pdf}
-\caption{\label{fig:MinSINR}Log-log plot of computation time (wall time) of minimum power problem against the problem size, for 25 runs.}
-\end{figure}
-
-The computational complexity of the power minimisation for $n$ up to 1000 is of order $\sim O(n^{2.8})$.
-
 \section{Conclusions}
-This article has shown that many well-known convex problems in communications can be written in a DCP format, meaning that they can be easily implemented in \texttt{cvxpy}.
+This article has shown that a well-known convex problem in communications can be written in a DCP format, meaning that they can be easily implemented in \texttt{cvxpy}.
 
 Our example code demonstrates a key strength of \texttt{cvxpy}, which is that the translation from the mathematical description to python code is straightforward and clear.  Conversely, one can also infer the mathematical problem from reading the code.
-
-The computational complexity of the problems examined had a clear trend which aligned with expectation.  This shows that convex optimisation solvers are robust to a variety of problem sizes and are scalable to at least problems of size 1000.
 
 While all problems that can be written in DCP are convex, not all convex problems of interest can be written in DCP.  Over time, the library of available DCP functions in \texttt{cvxpy} has grown, increasing the scope of convex optimisation problems that \texttt{cvxpy} can solve.  This expansion of scope of \texttt{cvxpy} is ongoing, with version 1.0 under development and expected in the near future.
 
