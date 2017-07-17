@@ -149,18 +149,14 @@ where $f,g: \mathbb{R}^n \rightarrow \mathbb{R}$ \cite[p.141]{cvxpybook}. We see
 Any local optimum $x^*$ for a convex optimisation problem is also a global optimum \cite[pp.138-139]{cvxpybook}, however an optimum may not be unique.
 
 \subsection{Disciplined convex programming}
-\texttt{cvxpy} is a symbolic programming module for \textit{Python} developed at Stanford\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. To implement DCP, \texttt{cvxpy} has a set of predefined functions in classes containing their curvature and sign. By only allowing certain operations with these known functions, general composition theorems from convex analysis can be applied to determine the convexity of the more complex expression. See Fig. \ref{fig:DCP}.  If this is the case, then interior point methods guarantee an optimal solution.
+\texttt{cvxpy} is a symbolic programming module for \textit{Python} developed at Stanford\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis. See Fig. \ref{fig:DCP}.  If this is the case, then interior point methods guarantee an optimal solution.
 
 \begin{figure}
 \includegraphics[width=0.7\linewidth]{DCP.pdf}
 \caption{\label{fig:DCP}Application of DCP rules to a set of \texttt{cvxpy} functions, where $\text{entr}(x)=-x\log(x)$.  Figure adapted from the Stanford DCP Analyzer \cite{dcp}.}
 \end{figure}
 
-The set of available DCP functions do not define the complete set of convex functions. However, as we will show later, a large class of interesting convex problems can be written in DCP format.
-
-We will show how \texttt{cvxpy} can be used simply to test a variety of optimisation problems, as a powerful easy-to-use tool for gaining insight into real-world problems.
-
-\section{Minimum power for a given SINR}
+\section{Example: power minimisation in communications}
 How can we minimise the total power consumption $P$ of $n$ transmitters each with power $p_i$, yet achieve a minimum SINR $\gamma_0$ for all $m$ receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and maximum power value that any transmitter can reach $P_{\text{max}}$:
 		\begin{align*}
 				&\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
