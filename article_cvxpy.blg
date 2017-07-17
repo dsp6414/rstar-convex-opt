@@ -4,47 +4,44 @@ The top-level auxiliary file: article_cvxpy.aux
 The style file: plain.bst
 Database file #1: article_cvxpyNotes.bib
 Database file #2: articleBib.bib
-Warning--entry type for "dcp" isn't style-file defined
---line 17 of file articleBib.bib
-You've used 4 entries,
+You've used 3 entries,
             2118 wiz_defined-function locations,
-            518 strings with 4452 characters,
-and the built_in function-call counts, 972 in all, are:
-= -- 87
-> -- 46
+            516 strings with 4406 characters,
+and the built_in function-call counts, 808 in all, are:
+= -- 77
+> -- 33
 < -- 0
-+ -- 19
-- -- 14
-* -- 44
-:= -- 177
-add.period$ -- 12
-call.type$ -- 4
-change.case$ -- 17
++ -- 13
+- -- 10
+* -- 48
+:= -- 147
+add.period$ -- 9
+call.type$ -- 3
+change.case$ -- 13
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 41
-empty$ -- 84
-format.name$ -- 14
-if$ -- 201
+cite$ -- 3
+duplicate$ -- 33
+empty$ -- 67
+format.name$ -- 10
+if$ -- 163
 int.to.chr$ -- 0
-int.to.str$ -- 4
-missing$ -- 5
-newline$ -- 23
-num.names$ -- 8
-pop$ -- 31
+int.to.str$ -- 3
+missing$ -- 4
+newline$ -- 18
+num.names$ -- 6
+pop$ -- 16
 preamble$ -- 1
-purify$ -- 15
+purify$ -- 11
 quote$ -- 0
-skip$ -- 29
+skip$ -- 22
 stack$ -- 0
-substring$ -- 21
-swap$ -- 4
+substring$ -- 40
+swap$ -- 3
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 12
+type$ -- 10
 warning$ -- 0
 while$ -- 8
-width$ -- 5
-write$ -- 42
-(There was 1 warning)
+width$ -- 4
+write$ -- 33
