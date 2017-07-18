@@ -1,0 +1,15 @@
+https://sinews.siam.org/Blog-Submission-Guidelines
+
+Bio text: Robert, Sami, Tim and Roger are PhD research students at MathSys---the Centre for Doctoral Training for Real-World Systems at the University of Warwick. As part of their Master's group project they were supervised by Keith Briggs who set an open-ended challenge to apply \texttt{cvxpy} to current communications problems.
+
+Keywords: communication, interference, convex optimisation, cvxpy, SINR
+
+Article image: 
+TBC but similar to this image http://media.istockphoto.com/photos/network-cable-with-fiber-optics-light-internet-concept-picture-id178043174
+
+Dynamic image: To be made
+ 
+
+
+
+
