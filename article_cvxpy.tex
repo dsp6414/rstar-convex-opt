@@ -1,5 +1,3 @@
-
-
 \documentclass[twocolumn,secnumarabic,amssymb, nobibnotes, aps, prl,superscriptaddress]{revtex4-1}
 %\usepackage{acrofont}%NOTE: Comment out this line for the release version!
 \newcommand{\revtex}{REV\TeX\ }
@@ -19,13 +17,11 @@
 \usepackage{datetime}				% custom date
 \usepackage{dsfont}					% for indicator function 1
 \usepackage{circuitikz}		
-
 \usepackage{url}					% clickable links
 \usepackage{marvosym}				% symbols
 \usepackage{wrapfig}				% wrapping text around figures
 \usepackage[T1]{fontenc}			% font encoding
 \usepackage{charter} 		
-
 \usepackage{listings}				% for adding coloured code
 \usepackage{color}
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -54,7 +50,6 @@
 
 	\newdateformat{mydate}{\monthname[\THEMONTH] \THEYEAR}
 
-
 % Customize (header and) footerb
 %\usepackage{fancyhdr}
 %\pagestyle{fancy}
@@ -73,7 +68,6 @@
 %%% DEFINITIONS
 %%% ---------------
 
-
 \newcommand{\NewsItem}[1]{%
 		\large #1 \vspace{4pt}
 		\par \normalsize \normalfont}
@@ -82,7 +76,6 @@
 			\hfill \textsc{#1} \vspace{4pt}
 			\par \normalfont}		
 
-
 %%% ---------------
 %%% BEGIN DOCUMENT
 %%% ---------------
@@ -90,8 +83,7 @@
 % Title	
 % -----
 
-\title{Convex optimisation in communications with cvxpy}
-
+\title{Convex optimisation in communications with \texttt{cvxpy}}
 \author{Robert P.~Gowers}%
 \affiliation{Department of Mathematics, University of Warwick}
 \author{Sami C.~Al-Izzi}%
@@ -114,9 +106,9 @@
 \section{Introduction}
 Convexity is an important property in optimisation. This is because if a problem is convex then the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering has driven the development of software packages, such as \texttt{cvxpy}.
 
-Here we show that an interesting problem in communications not only has a convex formulation (as shown in \cite{cvxpybook}), but can be easily implemented computationally using the \texttt{cvxpy} Python module. The ease of implementation makes \texttt{cvxpy} an invaluable tool for both students and researchers in many areas of science and engineering.
-\subsection{Convex Functions}
+Here we show that an interesting problem in communications has a convex formulation that can be easily implemented computationally using the \texttt{cvxpy} \textit{Python} module. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering.
 
+\subsection{Convex functions}
 %If a set $C$ is \textit{convex}, then for any two points $x,y\in C$, any point $z$ along the $x,y$ line must also $\in C$ \cite[p.23]{cvxpybook}. More formally, for $x,y\in C$ and $\theta\in [0,1]$:
 %\begin{align}
 %\theta x + (1-\theta)y\in C.
@@ -126,7 +118,7 @@ A function $f$, where $f:\mathbb{R}^n \rightarrow \mathbb{R}$, is \textit{convex
 \begin{align}
 f(\theta x + (1-\theta)y) \leq \theta f(x)+(1-\theta)f(y).
 \end{align}
-This means that the function is less than or equal to linear, as shown in Fig~\ref{fig:convex}. %A concave function can be made convex by the operation $f\to-f$.
+This means that the function is less than or equal to linear, as shown in Fig.~\ref{fig:convex}. %A concave function can be made convex by the operation $f\to-f$.
 \begin{figure}[h!]
 \includegraphics[width=0.9\linewidth]{convex_function.pdf}
 \caption{\label{fig:convex}A chord showing convexity of the function $x^4$.} 
@@ -149,44 +141,41 @@ where $f,g: \mathbb{R}^n \rightarrow \mathbb{R}$ \cite[p.141]{cvxpybook}. We see
 Any local optimum $x^*$ for a convex optimisation problem is also a global optimum \cite[pp.138-139]{cvxpybook}, however an optimum may not be unique.
 
 \subsection{Disciplined convex programming}
-\texttt{cvxpy} is a symbolic programming module for \textit{Python} developed at Stanford \cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If this is the case, then interior point methods guarantee an optimal solution.
+\texttt{cvxpy} is a symbolic programming module for \textit{Python}\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution.
 
 \section{Example: power minimisation in communications}
-For a real world example consider a system of $n$ transmitters and $m$ receivers distributed in $2$D Euclidian space where each of the transmitters has power $p_i$ \cite{shannon1949}. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and maximum power value that any transmitter can reach $P_{\text{max}}$:
+For a real-world example consider a system of $n$ transmitters each of power $p_i$ and $m$ receivers, all in $2$D Euclidean space\cite{shannon1949}. The signal-to-interference-plus-noise ratio (SINR) is the strength of the desired signal $S$ relative to the interference power $I$ plus the background noise $\sigma$ at a receiver. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and a maximum power constraint $P_{\text{max}}$ of any transmitter:
 \begin{align*}
 &\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
 &\text{subject to} \quad &&p_j \leq P_{\max}\\
 & \quad &&p_j \geq 0\\
-& \quad &&\gamma_i \geq \gamma_0&&
+& \quad &&\gamma_i \geq \gamma_0.&&
 \end{align*}
-where symbols $\succ$, $\succeq$ denote element-wise inequalities between vectors or matrices.
 
-The desired signal to receiver $i$ is denoted by $S_i = G_{ik}p_k$, while the interference to $i$ is $I_i = \sum_{j\neq k}G_{ij}p_j$. However DCP does not allow division of the optimisation variable $p_i$ so  
+The desired signal for receiver $i$ is $S_i = G_{ik}p_k$, while the interference at $i$ is $I_i = \sum_{j\neq k}G_{ij}p_j$. However DCP does not allow division of the optimisation variable $p_i$ so  
 \begin{equation*}
   \gamma_i \geq \gamma_0\Longleftrightarrow  \frac{S_i}{\sigma_i + I_i}\geq \gamma_0, \quad \forall i
 \end{equation*}
 was rearranged to:
 \begin{equation*}
 S_i-\gamma_0(\sigma_i + I_i)\geq 0, \quad \forall i
-\end{equation*} which is affine, and hence DCP.
+\end{equation*} which is affine, and hence a DCP function.
 
 \subsection{Path gain}
 The path gain $G_{ij}$ represents the proportion of power that reaches receiver $i$ from transmitter $j$. Supposing that the desired signal to receiver $i$ is from transmitter $k$, the power received is,
 \begin{equation}
 p_{ik}^{\text{rec}} = G_{ik}p_k.
 \end{equation}
-The signal-to-interference-plus-noise ratio (SINR) is the strength of the desired signal $S_i$ relative to the interference power $I_i$ plus the background noise $\sigma_i$ at $i$. Denoting the SINR at $i$ by $\gamma_i$, we have
+Denoting the SINR at $i$ by $\gamma_i$, we have
 \begin{equation}
 \gamma_i = \frac{G_{ik}p_k}{\sigma_i+\sum_{j\neq k}G_{ij}p_j}
 =\frac{S_i}{\sigma_i+I_i}.
 \end{equation}
-In a physical context, the path gain from transmitter $j$ to receiver $i$ will depend on the distance, $d_{ij}$ between them.  Assuming isotropic propagation from each transmitter, the fraction of power from $j$ that reaches $i$ is given by,
-
+In a physical context, the path gain from transmitter $j$ to receiver $i$, as shown in Fig.~\ref{fig:pathgain}, will depend on the distance, $d_{ij}$ between them. Assuming isotropic propagation from each transmitter, the fraction of power from $j$ that reaches $i$ is:
 \begin{equation}
 G_{ij} = k_i/d_{ij}^\alpha
 \end{equation}
-
-where $\alpha$ is the pathloss coefficient, $k$ is a proportionality constant specific to the receiver $i$.  For free space $\alpha = 2$, while for an urban environment $\alpha \sim 3.5$ \cite{hata1980}.  Further physical complexities, such as the stochastic effects from Rayleigh fading can be easily implemented.
+where $\alpha$ is the pathloss coefficient and $k$ is a proportionality constant specific to the receiver $i$.  For free space $\alpha = 2$, while in urban environments $\alpha \sim 3.5$ \cite{hata1980}. Further physical complexities, such as the stochastic effects from Rayleigh fading can be easily incorporated.
 
 \begin{figure}[H]
 \centering
@@ -204,16 +193,16 @@ where $\alpha$ is the pathloss coefficient, $k$ is a proportionality constant sp
     %\path [<->] (C) edge node {$1$} (B);
 \end{scope}
 \end{tikzpicture}
-\caption{Path lengths between receiver $i$ and transmitters $j$ and $k$.}\label{fig:spatial_diagram}
+\caption{\label{fig:pathgain}Path lengths between receiver $i$ and transmitters $j$ and $k$.}
 \end{figure}
 
 \subsection{Example code}
-To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below: \lstinputlisting[language=Python]{minimisePgivenSINR.py}
+To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below: \lstinputlisting[language=Python,mathescape=true]{minimisePgivenSINR.py}
 
 \section{Outlook}
-The authors hope that this article shows the ease with the which \texttt{cvxpy} can be brought to bare on simple ``toy'' problems of real world relevance. We believe that this is an invaluable resource for researchers wanting test the applicability of convex optimization in new fields. 
+The authors hope that this article shows the utility of \texttt{cvxpy} for simple ``toy'' problems of real-world relevance. We believe it is an invaluable resource for researchers wanting test the applicability of convex optimisation in new fields. 
 
-The module could also be easily incorporated into a course on optimization, providing students with a simple environment with which to implement techniques for convex optimization.
+The module could also be easily incorporated into a course on optimisation, providing students with an accessible environment to practise techniques for convex optimisation.
 
 %While all problems that can be written in DCP are convex, not all convex problems of interest can be written in DCP.  Over time, the library of available DCP functions in \texttt{cvxpy} has grown, increasing the scope of convex optimisation problems that \texttt{cvxpy} can solve.  This expansion of scope of \texttt{cvxpy} is ongoing, with version 1.0 under development and expected in the near future.
 
@@ -221,13 +210,10 @@ The module could also be easily incorporated into a course on optimization, prov
 %While many problems are convex, others fall into a similar category of being \textit{quasi-convex}.  A quasi-convex function $f$ is one for which $\textbf{dom} f$ and every sublevel set of $f$ is convex.  An example of this is shown in Figure [?].  Quasi-convex problems cannot be solved directly using convex optimisation solvers, however the feasibility of a sublevel set can be checked.  This feasibility check can be used as a bisection method to find the solution.  A more thorough discussion of quasi-convex problems can be found in \cite{cvxpybook}chapter?.
 
 %\section{Further applications}
-\subsection*{Acknowledgements}
-We would like to thank S. Johnson and S. Diamond for helpful discussions.
+\subsection*{Acknowledgements and appendix}
+We would like to thank S. Johnson and S. Diamond for helpful discussions. Full code for other communication examples can be found at\\ https://github.com/cvxgrp/cvxpy/tree/master\\/examples/communications.
 
-\section*{Appendix}
-Full code can be found at\\ https://github.com/cvxgrp/cvxpy/tree/master\\/examples/communications.
-
-\vspace{1cm}
+\vspace{0.2cm}
 %\section{Links \& references}
 \bibliography{articleBib} 
 \bibliographystyle{plain}
