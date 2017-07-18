@@ -85,17 +85,14 @@
 
 \title{Convex optimisation in communications with \texttt{cvxpy}}
 \author{Robert P.~Gowers}%
-\affiliation{Department of Mathematics, University of Warwick}
 \author{Sami C.~Al-Izzi}%
-\affiliation{Department of Mathematics, University of Warwick}
 \author{Timothy M.~Pollington}%
-\affiliation{Department of Mathematics, University of Warwick}
 \author{Roger J.~W.~Hill}%
 \affiliation{Department of Mathematics, University of Warwick}
 \author{Keith Briggs}
 \affiliation{BT, Adastral Park}
-
 \maketitle
+
 % -----
 
 % Front article
@@ -106,7 +103,7 @@
 \section{Introduction}
 Convexity is an important property in optimisation. This is because if a problem is convex then the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering has driven the development of software packages, such as \texttt{cvxpy}.
 
-Here we show that an interesting problem in communications has a convex formulation that can be easily implemented computationally using the \texttt{cvxpy} \textit{Python} module. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering.
+Here we show that an interesting problem in communications has a convex formulation that can be easily implemented computationally using the \texttt{cvxpy} \textit{Python} module. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering. First let us introduce some basic convexity concepts.
 
 \subsection{Convex functions}
 %If a set $C$ is \textit{convex}, then for any two points $x,y\in C$, any point $z$ along the $x,y$ line must also $\in C$ \cite[p.23]{cvxpybook}. More formally, for $x,y\in C$ and $\theta\in [0,1]$:
@@ -200,9 +197,9 @@ where $\alpha$ is the pathloss coefficient and $k$ is a proportionality constant
 To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below: \lstinputlisting[language=Python,mathescape=true]{minimisePgivenSINR.py}
 
 \section{Outlook}
-The authors hope that this article shows the utility of \texttt{cvxpy} for simple ``toy'' problems of real-world relevance. We believe it is an invaluable resource for researchers wanting test the applicability of convex optimisation in new fields. 
+The authors hope that this article shows the utility of \texttt{cvxpy} for simple `toy' problems of real-world relevance. We believe it is an invaluable resource for researchers wanting test the applicability of convex optimisation in new fields. 
 
-The module could also be easily incorporated into a course on optimisation, providing students with an accessible environment to practise techniques for convex optimisation.
+The module could also be easily incorporated into a course on optimisation, providing students with an accessible environment to practise techniques for convex optimisation. Full code for other communication examples can be found at https://github.com/cvxgrp/cvxpy/\\tree/master/examples/communications.
 
 %While all problems that can be written in DCP are convex, not all convex problems of interest can be written in DCP.  Over time, the library of available DCP functions in \texttt{cvxpy} has grown, increasing the scope of convex optimisation problems that \texttt{cvxpy} can solve.  This expansion of scope of \texttt{cvxpy} is ongoing, with version 1.0 under development and expected in the near future.
 
@@ -210,8 +207,8 @@ The module could also be easily incorporated into a course on optimisation, prov
 %While many problems are convex, others fall into a similar category of being \textit{quasi-convex}.  A quasi-convex function $f$ is one for which $\textbf{dom} f$ and every sublevel set of $f$ is convex.  An example of this is shown in Figure [?].  Quasi-convex problems cannot be solved directly using convex optimisation solvers, however the feasibility of a sublevel set can be checked.  This feasibility check can be used as a bisection method to find the solution.  A more thorough discussion of quasi-convex problems can be found in \cite{cvxpybook}chapter?.
 
 %\section{Further applications}
-\subsection*{Acknowledgements and appendix}
-We would like to thank S. Johnson and S. Diamond for helpful discussions. Full code for other communication examples can be found at\\ https://github.com/cvxgrp/cvxpy/tree/master\\/examples/communications.
+\subsection*{Acknowledgements}
+We would like to thank S.~Johnson from MathSys and S.~Diamond for helpful discussions. 
 
 \vspace{0.2cm}
 %\section{Links \& references}
