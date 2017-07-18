@@ -141,7 +141,7 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
 \texttt{cvxpy} is a symbolic programming module for \textit{Python}\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution.
 
 \section{Example: power minimisation in communications}
-For a real-world example consider a system of $n$ transmitters each of power $p_i$ and $m$ receivers, all in $2$D Euclidean space\cite{shannon1949}. The signal-to-interference-plus-noise ratio (SINR) is the strength of the desired signal $S$ relative to the interference power $I$ plus the background noise $\sigma$ at a receiver. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to a telecoms company who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and a maximum power constraint $P_{\text{max}}$ of any transmitter:
+For a real-world example consider a system of $n$ transmitters each of power $p_i$ and $m$ receivers, all in $2$D Euclidean space\cite{shannon1949}. The signal-to-interference-plus-noise ratio (SINR) is the strength of the desired signal $S$ relative to the interference power $I$ plus the background noise $\sigma$ at a receiver. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to telecoms companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and a maximum power constraint $P_{\text{max}}$ of each transmitter:
 \begin{align*}
 &\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
 &\text{subject to} \quad &&p_j \leq P_{\max}\\
@@ -153,7 +153,7 @@ The desired signal for receiver $i$ is $S_i = G_{ik}p_k$, while the interference
 \begin{equation*}
   \gamma_i \geq \gamma_0\Longleftrightarrow  \frac{S_i}{\sigma_i + I_i}\geq \gamma_0, \quad \forall i
 \end{equation*}
-was rearranged to:
+was rearranged to,
 \begin{equation*}
 S_i-\gamma_0(\sigma_i + I_i)\geq 0, \quad \forall i
 \end{equation*} which is affine, and hence a DCP function.
@@ -194,7 +194,7 @@ where $\alpha$ is the pathloss coefficient and $k$ is a proportionality constant
 \end{figure}
 
 \subsection{Example code}
-To indicate the brevity of code implementation in \texttt{cvxpy} we show an abridged version below: \lstinputlisting[language=Python,mathescape=true]{minimisePgivenSINR.py}
+To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below: \lstinputlisting[language=Python,mathescape=true]{minimisePgivenSINR.py}
 
 \section{Outlook}
 The authors hope that this article shows the utility of \texttt{cvxpy} for simple `toy' problems of real-world relevance. We believe it is an invaluable resource for researchers wanting test the applicability of convex optimisation in new fields. 
