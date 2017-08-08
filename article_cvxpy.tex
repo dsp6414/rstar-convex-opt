@@ -24,6 +24,7 @@
 \usepackage{charter} 		
 \usepackage{listings}				% for adding coloured code
 \usepackage{color}
+%\setlength{\parindent}{0pt} % to not indent any paragraphs
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -50,20 +51,6 @@
 
 	\newdateformat{mydate}{\monthname[\THEMONTH] \THEYEAR}
 
-% Customize (header and) footerb
-%\usepackage{fancyhdr}
-%\pagestyle{fancy}
-%\lfoot{	\footnotesize 
-%		Mathematics Today magazine article \\
-%		\Mundus\ \href{www.warwick.ac.uk/mathsys}{Mathematics for Real-World Systems CDT, University of Warwick and BT Research, Adastral Park}	\quad
-		%\Telefon\ 555-5555											\quad
-%\\		\Letter\ \href{mailto:R.Gowers@warwick.ac.uk}{Corresponding author: R.Gowers@warwick.ac.uk}
-%	  }
-%\cfoot{}
-%\rfoot{\footnotesize ~\\ Page \thepage}
-%\renewcommand{\headrulewidth}{0.0pt}	% no bar on top of page
-%\renewcommand{\footrulewidth}{0.4pt}	% bar on bottom of page
-
 %%% ---------------
 %%% DEFINITIONS
 %%% ---------------
@@ -76,9 +63,6 @@
 			\hfill \textsc{#1} \vspace{4pt}
 			\par \normalfont}		
 
-%%% ---------------
-%%% BEGIN DOCUMENT
-%%% ---------------
 \begin{document}
 % Title	
 % -----
@@ -97,11 +81,11 @@
 
 % Front article
 % -----
-	\NewsItem{``Nothing takes place in the world whose meaning is not that of some maximum or minimum.''}
+	\NewsItem{\noindent``Nothing takes place in the world whose meaning is not that of some maximum or minimum.''}
 	\NewsAuthor{Leonard Euler (1707-1783)}
     
 \section{Introduction}
-Convexity is an important property in optimisation. This is because if a problem is convex then the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering has driven the development of software packages, such as \texttt{cvxpy}.
+\noindent Convexity is an important property in optimisation. This is because if a problem is convex then the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering has driven the development of software packages, such as \texttt{cvxpy}.
 
 Here we show that an interesting problem in communications has a convex formulation that can be easily implemented computationally using the \texttt{cvxpy} \textit{Python} module. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering. First let us introduce some basic convexity concepts.
 
@@ -111,7 +95,7 @@ Here we show that an interesting problem in communications has a convex formulat
 %\theta x + (1-\theta)y\in C.
 %\end{align}
 
-A function $f$, where $f:\mathbb{R}^n \rightarrow \mathbb{R}$, is \textit{convex} if $\forall x,y\in \textbf{dom} f$ and $0 \leq \theta \leq 1$ \cite[p.67]{cvxpybook}:
+\noindent A function $f$, where $f:\mathbb{R}^n \rightarrow \mathbb{R}$, is \textit{convex} if $\forall x,y\in \textbf{dom} f$ and $0 \leq \theta \leq 1$ \cite[p.67]{cvxpybook}:
 \begin{align}
 f(\theta x + (1-\theta)y) \leq \theta f(x)+(1-\theta)f(y).
 \end{align}
@@ -122,7 +106,7 @@ This means that the function is less than or equal to linear, as shown in Fig.~\
 \end{figure}
 
 \subsection{Convex optimisation}
-A \textit{convex optimisation problem} has three components:
+\noindent A \textit{convex optimisation problem} has three components:
 \begin{itemize}
 \item a convex \textit{objective function} $f_0(x)$,
 \item $m$ convex \textit{inequality constraint functions} $f_i(x)$,
@@ -138,10 +122,10 @@ where $f,g: \mathbb{R}^n \rightarrow \mathbb{R}$ \cite[p.141]{cvxpybook}. We see
 Any local optimum $x^*$ for a convex optimisation problem is also a global optimum \cite[pp.138-139]{cvxpybook}, however an optimum may not be unique.
 
 \subsection{Disciplined convex programming}
-\texttt{cvxpy} is a symbolic programming module for \textit{Python}\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution.
+\noindent In order to solve convex optimisation problems, we used \texttt{cvxpy}, a symbolic programming module for \textit{Python}\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution.
 
 \section{Example: power minimisation in communications}
-For a real-world example consider a system of $n$ transmitters each of power $p_i$ and $m$ receivers, all in $2$D Euclidean space\cite{shannon1949}. The signal-to-interference-plus-noise ratio (SINR) is the strength of the desired signal $S$ relative to the interference power $I$ plus the background noise $\sigma$ at a receiver. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to telecoms companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and a maximum power constraint $P_{\text{max}}$ of each transmitter:
+\noindent For a real-world example consider a system of $n$ transmitters each of power $p_i$ and $m$ receivers, all in $2$D Euclidean space\cite{shannon1949}. The signal-to-interference-plus-noise ratio (SINR) is the strength of the desired signal $S$ relative to the interference power $I$ plus the background noise $\sigma$ at a receiver. How can we minimise the total power consumption $P$ of transmitters, yet achieve a minimum Signal to Interference plus Noise Ratio (SINR), $\gamma_0$, for all receivers? This question is relevant to telecoms companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix $G$, background noise level $\sigma$ and a maximum power constraint $P_{\text{max}}$ of each transmitter:
 \begin{align*}
 &\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
 &\text{subject to} \quad &&p_j \leq P_{\max}\\
@@ -159,7 +143,7 @@ S_i-\gamma_0(\sigma_i + I_i)\geq 0, \quad \forall i
 \end{equation*} which is affine, and hence a DCP function.
 
 \subsection{Path gain}
-The path gain $G_{ij}$ represents the proportion of power that reaches receiver $i$ from transmitter $j$. Supposing that the desired signal to receiver $i$ is from transmitter $k$, the power received is,
+\noindent The path gain $G_{ij}$ represents the proportion of power that reaches receiver $i$ from transmitter $j$. Supposing that the desired signal to receiver $i$ is from transmitter $k$, the power received is,
 \begin{equation}
 p_{ik}^{\text{rec}} = G_{ik}p_k.
 \end{equation}
@@ -194,10 +178,10 @@ where $\alpha$ is the pathloss coefficient and $k$ is a proportionality constant
 \end{figure}
 
 \subsection{Example code}
-To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below: \lstinputlisting[language=Python,mathescape=true]{minimisePgivenSINR.py}
+\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below: \lstinputlisting[language=Python,mathescape=true]{minimisePgivenSINR.py}
 
 \section{Outlook}
-The authors hope that this article shows the utility of \texttt{cvxpy} for simple `toy' problems of real-world relevance. We believe it is an invaluable resource for researchers wanting test the applicability of convex optimisation in new fields. 
+\noindent The authors hope that this article shows the utility of \texttt{cvxpy} for simple `toy' problems of real-world relevance. We believe it is an invaluable resource for researchers wanting test the applicability of convex optimisation in new fields. 
 
 The module could also be easily incorporated into a course on optimisation, providing students with an accessible environment to practise techniques for convex optimisation. Full code for other communication examples can be found at https://github.com/cvxgrp/cvxpy/\\tree/master/examples/communications.
 
