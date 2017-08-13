@@ -5,17 +5,17 @@ import numpy as np
 n = 3
 k = 1.0
 d = np.random.rand(n,n)
-d_s = 0.5*(d+d.T)
+d_s = 0.5 * (d + d.T)
 
 G = np.zeros((n,n))
-G = k/d_s**3.5
+G = k / d_s ** 3.5
 
 $\delta$ = np.identity(n)
 S = G * $\delta$
 I = G - S
 
-sigma = 0.1*np.ones(n)
-gamma = 1.0
+$\sigma$ = 0.1 * np.ones(n)
+$\gamma$ = 1.0
 Pmax = 1.0
 
 # Define optimisation variable
