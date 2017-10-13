@@ -69,12 +69,18 @@
 
 \title{Convex optimisation in communications with \texttt{cvxpy}}
 \author{Robert P.~Gowers}%
+\email{r.gowers@warwick.ac.uk}
 \author{Sami C.~Al-Izzi}%
+\email{s.al-izzi@warwick.ac.uk}
 \author{Timothy M.~Pollington}%
+\email{t.pollington@warwick.ac.uk}
 \author{Roger J.~W.~Hill}%
+\email{r.hill.3@warwick.ac.uk}
 \affiliation{Department of Mathematics, University of Warwick}
 \author{Keith Briggs}
+\email{keith.briggs@bt.com}
 \affiliation{BT, Adastral Park}
+%\affiliation{r.gowers@warwick.ac.uk}
 \maketitle
 
 % -----
@@ -87,7 +93,7 @@
 \section{Introduction}
 \noindent Convexity is an important property in optimisation. This is because if a problem is convex then the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering has driven the development of software packages, such as \texttt{cvxpy}.
 
-Here we show that an interesting problem in communications has a convex formulation that can be easily implemented computationally using the \texttt{cvxpy} \textit{Python} module. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering. First let us introduce some basic convexity concepts.
+Here we show that an interesting problem in communications has a convex formulation that can be easily implemented computationally using the \texttt{cvxpy} \textit{Python} module. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering. First let us introduce what convexity means.
 
 \subsection{Convex functions}
 %If a set $C$ is \textit{convex}, then for any two points $x,y\in C$, any point $z$ along the $x,y$ line must also $\in C$ \cite[p.23]{cvxpybook}. More formally, for $x,y\in C$ and $\theta\in [0,1]$:
@@ -100,10 +106,6 @@ Here we show that an interesting problem in communications has a convex formulat
 f(\theta x + (1-\theta)y) \leq \theta f(x)+(1-\theta)f(y).
 \end{align}
 This means that the function is less than or equal to linear, as shown in Fig.~\ref{fig:convex}. %A concave function can be made convex by the operation $f\to-f$.
-\begin{figure}[h!]
-\includegraphics[width=0.9\linewidth]{convex_function.pdf}
-\caption{\label{fig:convex}A chord showing convexity of the function $x^4$.} 
-\end{figure}
 
 \subsection{Convex optimisation}
 \noindent A \textit{convex optimisation problem} has three components:
@@ -120,6 +122,11 @@ where $f,g: \mathbb{R}^n \rightarrow \mathbb{R}$ \cite[p.141]{cvxpybook}. We see
 \end{align}
 
 Any local optimum $x^*$ for a convex optimisation problem is also a global optimum \cite[pp.138-139]{cvxpybook}, however an optimum may not be unique.
+
+\begin{figure}[h!]
+\includegraphics[width=0.9\linewidth]{convex_function.pdf}
+\caption{\label{fig:convex}A chord showing convexity of the function $x^4$.} 
+\end{figure}
 
 \subsection{Disciplined convex programming}
 \noindent In order to solve convex optimisation problems, we used \texttt{cvxpy}, a symbolic programming module for \textit{Python}\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution.
@@ -193,6 +200,9 @@ The module could also be easily incorporated into a course on optimisation, prov
 %\section{Further applications}
 \subsection*{Acknowledgements}
 We would like to thank S.~Johnson from MathSys and S.~Diamond for helpful discussions. 
+
+\subsection*{Author Biography}
+Robert Gowers, Sami Al-Izzi, Timothy Pollington and Roger Hill are PhD students in the Mathematics for Real-World Systems CDT at the University of Warwick.  Keith Briggs is a senior research mathematician at BT.
 
 \vspace{0.2cm}
 %\section{Links \& references}
