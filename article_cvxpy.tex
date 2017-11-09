@@ -132,23 +132,32 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
 \noindent In order to solve convex optimisation problems, we used \texttt{cvxpy}, a symbolic programming module for \textit{Python}\cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution. Interior point methods work by applying Newtons algorithm to sequences of equally constrained problems. The algorithm works by picking a step and direction to travel in the interior of the feasible convex set, such that the solution progresses towards optimality, for more details on barrier methods and primal-dual methods see \citep[p.561]{cvxpybook}.
 
 \section{Example: power minimisation in communications}
-\noindent To demonstrate the applicability of \texttt{cvxpy} to  a real-world example, we consider a system of $n$ transmitters each of power $p_i$ and $m$ receivers, all in $2$D Euclidean space\cite{shannon1949}. In this problem we are constrained to having a minimum signal-to-interference-plus-noise ratio (SINR or $\gamma$) at each receiver
+\noindent To demonstrate the applicability of \texttt{cvxpy} to  a real-world example, we consider a system of $n$ transmitters each of power $p_k$, ($k=1,2,...,n$) and $m$ receivers, all in $2$D Euclidean space\cite{shannon1949}. In this problem we are constrained to having a minimum signal-to-interference-plus-noise ratio (SINR or $\gamma$) at each receiver
 \begin{equation}
 \gamma =\frac{S}{I+\sigma}
 \end{equation} 
-where $S$ is the power of the desired signal, $I$ is the interference power and $\sigma$ is the background noise at a receiver. 
+where $S$ is the power of the desired signal, $I$ is the interference power and $\sigma$ is the background noise at a receiver.
 
-How can we minimise the total power consumption, $P$, of transmitters, yet achieve this minimum SINR, $\gamma_0$, for all receivers? This question is relevant to telecoms companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix, $G$, background noise level $\sigma$, a maximum power constraint $P_{\text{max}}$ of each transmitter and the fact that all transmitters must have positive power:
+How can we minimise the total power consumption, $P$, of transmitters, yet achieve this minimum SINR, $\gamma_0$, for all $i$ receivers ($i = 1,2,...,m$)? This question is relevant to telecoms companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path gain matrix, $G$, background noise level vector $\sigma$, a maximum power constraint $P_{\text{max}}$ of each transmitter and the fact that all transmitters must have positive power:
 \begin{align*}
-&\underset{p}{\text{minimise}} \quad &&\sum_j p_j\\
-&\text{subject to} \quad &&p_j \leq P_{\max}\\
-& \quad &&p_j \geq 0\\
+&\underset{p}{\text{minimise}} \quad &&\sum_k p_k\\
+&\text{subject to} \quad &&p_k \leq P_{\max}\\
+& \quad &&p_k \geq 0\\
 & \quad &&\gamma_i \geq \gamma_0.&&
 \end{align*}
 
-The desired signal for receiver $i$ is $S_i = G_{ik}p_k$, while the interference at $i$ is $I_i = \sum_{j\neq k}G_{ij}p_j$. However DCP does not allow division of the optimisation variable $p_i$, as it cannot guarantee curvature, so  
+Supposing that we want to receive a signal at receiver $i$ from transmitter $k$, we define the recipient matrix, $\delta$, as
+\begin{align*}
+\delta_{ij} = \begin{cases}
+1, \quad j=k\\
+0, \quad j\neq k
+\end{cases},
+\end{align*}
+and our signal potential matrix $\hat{S}$ as $\hat{S} = G*\delta$.  This means that signal received at transmitter $i$ is, $S_i = \hat{S}_{ik}p_k = G_{ik}p_k$.
+% The desired signal for receiver $i$ is $S_i = G_{ik}p_k$, 
+While the interference potential matrix is defined as $\hat{I} = G-\hat{S}$, giving the interference at $i$ is $I_i = (\hat{I}*p)_i = \sum_{j\neq k}G_{ij}p_j$. We must note that DCP does not allow division of the optimisation variable $p_i$, as it cannot guarantee curvature, so  
 \begin{equation*}
-  \gamma_i \geq \gamma_0\Longleftrightarrow  \frac{S_i}{\sigma_i + I_i}\geq \gamma_0, \quad \forall i
+  \gamma_i \geq \gamma_0\Longleftrightarrow  \frac{S_i}{\sigma_i + I_i} = \frac{G_{ik}p_k}{\sigma_i+\sum_{j\neq k}G_{ij}p_j} \geq \gamma_0, \quad \forall i
 \end{equation*}
 is rearranged to,
 \begin{equation*}
@@ -156,16 +165,16 @@ S_i-\gamma_0(\sigma_i + I_i)\geq 0, \quad \forall i
 \end{equation*} which is affine, and hence a DCP function.
 
 \subsection{Path gain}
-\noindent The path gain $G_{ij}$ represents the proportion of power that reaches receiver $i$ from transmitter $j$. Supposing that the desired signal to receiver $i$ is from transmitter $k$, the power received is,
-\begin{equation}
-p_{ik}^{\text{rec}} = G_{ik}p_k.
-\end{equation}
-Denoting the SINR at $i$ by $\gamma_i$, we have
-\begin{equation}
-\gamma_i = \frac{G_{ik}p_k}{\sigma_i+\sum_{j\neq k}G_{ij}p_j}
-=\frac{S_i}{\sigma_i+I_i}.
-\end{equation}
-In a physical context, the path gain from transmitter $j$ to receiver $i$, as shown in Fig.~\ref{fig:pathgain}, will depend on the distance, $d_{ij}$ between them. Assuming isotropic propagation from each transmitter, the fraction of power from $j$ that reaches $i$ is:
+%\noindent The path gain $G_{ij}$ represents the proportion of power that reaches receiver $i$ from transmitter $j$. Supposing that the desired signal to receiver $i$ is from transmitter $k$, the power received is,
+%\begin{equation}
+%p_{ik}^{\text{rec}} = G_{ik}p_k.
+%\end{equation}
+%Denoting the SINR at $i$ by $\gamma_i$, we have
+%\begin{equation}
+%\gamma_i = \frac{G_{ik}p_k}{\sigma_i+\sum_{j\neq k}G_{ij}p_j}
+%=\frac{S_i}{\sigma_i+I_i}.
+%\end{equation}
+\noindent In a physical context, the path gain from transmitter $j$ to receiver $i$, as shown in Fig.~\ref{fig:pathgain}, will depend on the distance, $d_{ij}$ between them. Assuming isotropic propagation from each transmitter, the fraction of power from $j$ that reaches $i$ is:
 \begin{equation}
 G_{ij} = k_i/d_{ij}^\alpha
 \end{equation}
@@ -190,8 +199,15 @@ where $\alpha$ is the pathloss coefficient and $k$ is a proportionality constant
 \caption{\label{fig:pathgain}Path lengths between receiver $i$ and transmitters $j$ and $k$.}
 \end{figure}
 
+\subsection{Implementation}
+For ease of terminology, we will make a few simplifying assumptions.  First, we set the number of transmitters equal to the number of receivers, so $n=m$.  We also pair receiver $i$ to transmitter $k$ such that $i=k$.  This means that the recipient matrix $\delta$ is the $n\times n$ identity matrix.\\
+
+For paired transmitters and receivers ($k=i$), we randomly sample distances $d$ from a scaled $\beta(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we randomly sample distances $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.\\
+
+We have chosen the background noise vector $\sigma$ as constant for each receiver, with $\sigma_i = 5$.
+
 \subsection{Example code}
-\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below: \lstinputlisting[language=Python,mathescape=true]{minimisePgivenSINR.py}
+\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below: \lstinputlisting[language=Python,mathescape=true,inputencoding=utf8,literate={δ}{$\delta$}1 {σ}{$\sigma$}1 {γ}{$\gamma$}1 {∈}{$\in$}1 ]{minimisePgivenSINR.py}
 
 \section{Outlook}
 \noindent The authors hope that this article shows the utility of \texttt{cvxpy} for simple `toy' problems of real-world relevance. $\texttt{cvxpy}$ can handle problems with up to $\sim 10^3$ transmitters, however this takes $\sim 10^{4}-10^{5}\text{ms}$ to run, hence for large real-world problems a faster implementation would likely be required (e.g. C++ based library). However there is obviously a trade off in terms of ease of understanding with these packages.
