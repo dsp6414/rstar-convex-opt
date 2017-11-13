@@ -205,7 +205,12 @@ For ease of terminology, we will make a few simplifying assumptions.  First, we 
 
 All the parameters we will take as dimensionless to give simple numbers to work with.  The maximum available power, $P_{\text{max}}$ is set to 1.  We have chosen the background noise vector $\sigma$ as constant for each receiver, with $\sigma_i = 5$.  Similarly, the receiver coefficient $A$ was set to $0.025$ for each receiver. \\ 
 
-To generate the gain matrix $G$, we randomly sample distances from a given distribution.  For paired transmitters and receivers ($k=i$), we sample $d$ from a scaled $\beta(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we sample $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.\\ 
+To generate the gain matrix $G$, we randomly sample distances from a given distribution.  For paired transmitters and receivers ($k=i$), we sample $d$ from a scaled $\beta(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we sample $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.  This is illustrated in Figure \ref{fig:dist}.
+
+\begin{figure}[h!]
+\includegraphics[width=0.9\linewidth]{distance_distributions.pdf}
+\caption{\label{fig:dist}The distance between unpaired transmitters and receivers has a higher variance than paired ones, but on average the unpaired distances are expected to be greater.} 
+\end{figure}
 
 \subsection{Example code}
 \noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below.  For the random seed of 100 given, the optimal total power consumption is $P = 0.381$, with $p_1,p_2,p_3 = (0.139, 0.072, 0.169)$.  Around 70\% of the simulations with these parameters have a feasible solution, with an average optimal power consumption of $P\sim0.4$.
