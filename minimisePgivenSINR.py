@@ -6,17 +6,17 @@ np.random.seed(100)
 # Define variables
 n = 3 # number of transmitters = receivers
 A = 0.025 # uniform receiver coefficient
-δ = np.identity(n) # identity matrix
+Δ = np.identity(n) # identity matrix
 # unwanted transmitters d∈U[0,1] from receivers
 d_unpair = np.random.rand(n,n)
 # desired transmitters d∈0.2B[2,2] from receivers
 d_pair = np.random.beta(2,2,size=n)*0.20 
  # make the matrix symmetric
-d = np.tril(d_unpair) + np.tril(d_unpair, -1).T-np.diag(d_unpair)*δ+d_pair*δ
+d = np.tril(d_unpair) + np.tril(d_unpair, -1).T-np.diag(d_unpair)*Δ+d_pair*Δ
 
 G = np.zeros((n,n)) # gain matrix G
 G = A / d ** 3.5
-S_hat = G * δ # signal potential matrix
+S_hat = G * Δ # signal potential matrix
 I_hat = G - S_hat # interference potential matrix
 
 σ = 5.0 * np.ones(n)
