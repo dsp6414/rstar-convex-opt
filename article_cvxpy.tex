@@ -1,5 +1,6 @@
+% edited Keith Briggs 2017-11-23
 % edited Keith Briggs 2017-11-16
-% latexmk -pdf article_cvxpy_2017-11-16 && e article_cvxpy_2017-11-16.pdf &
+% latexmk -pdf article_cvxpy && e article_cvxpy.pdf &
 
 \documentclass[twocolumn,secnumarabic,amssymb, nobibnotes, aps, prl,superscriptaddress]{revtex4-1}
 %\usepackage{acrofont}%NOTE: Comment out this line for the release version!
@@ -140,25 +141,24 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
 %Interior point methods work by applying Newton's algorithm to sequences of equally constrained problems. Is it right that Newton's method is used???
  The algorithm works by picking a step and direction to travel in the interior of the feasible convex set, such that the solution progresses towards optimality, for more details on barrier methods and primal-dual methods see \citep[p.561]{cvxpybook}.
  
- \section{Example 1: water-filling}
+\section{Example 1: water-filling}
  
- One of the simplest problems to solve in communications with convex optimisation is the classic \textit{water-filling} problem.  This is where a total power $P$ is to be assigned to $n$ different communications channels, with the objective of maximising the total communication rate.  The communication rate of the $i$th channel, $r_i$ is given by \citep[p.245]{cvxpybook}, 
+\noindent{}One of the simplest problems to solve in communications with convex optimisation is the classic \textit{water-filling} problem.  Here a total power $P$ is to be assigned to $n$ different communications channels, with the objective of maximising the total communication rate.  By Shannon's theorem \citep[p.245]{cvxpybook}, an upper bound for the rate is given by $\log(1+x_i/\alpha_i)$, where $x_i$ be the power allocated to the $i$th channel and $\alpha_i$ is the noise power in that channel. This can be written as $\log(\alpha_i+x_i)-\log(\alpha_i)$ and the constants $\log(\alpha_i)$ disregarded for the purposes of maximization, and thus the communication rate $r_i$ of the $i$th channel is given by
  \begin{align}
-  r_i = \log(x_i+\alpha_i),
+  r_i = \log(x_i+\alpha_i).
  \end{align}
- where $x_i$ is the power allocated to the $i$th channel and $\alpha_i$ is the floor above the baseline at which power can be added to the channel.  This can be seen in Figure \ref{fig:waterfilling} as being analogous to filling an uneven basin to a constant level (hence the name \textit{water-filling}).
+This can be seen in Figure~\ref{fig:waterfilling} as being analogous to filling an uneven basin to a constant level (hence the name \textit{water-filling}).
  
- Noting that all power allocations must be non-negative, the optimisation problem can therefore be formulated as,
+Noting that all power allocations must be non-negative, the optimisation problem can therefore be formulated as,
  \begin{align}
 \text{minimise} \quad  -&\sum_{i=1}^{n} \log(x_i+\alpha_i) \nonumber \\
-\text{subject to} \quad &x_i \geq 0, \quad \forall i \nonumber \\
+\text{subject to} \quad &x_i \geqslant 0, \quad \forall i \nonumber \\
 &\sum_{i=1}^{n}x_i = P.
  \end{align}
- This is a convex problem since $-\log(x_i+\alpha_i)$ has positive curvature within the domain $x_i \geq 0$, and all the constraints are affine and therefore convex.
-
+This is a convex problem since $-\log(x_i+\alpha_i)$ has positive curvature within the domain $x_i \geqslant 0$, and all the constraints are affine and therefore convex.
 
 \subsection{Implementation}
-We decided to solve the water-filling problem using \texttt{cvxpy} with $n=3$ channels and $(\alpha_1,\alpha_2,\alpha_3) = (0.8,1.0,1.2)$.  For simplicity we chose a dimensionless total power $P=1$.  Using these parameters, the maximum communication rate is, $\sum_{i=1}^{n}r_i = 0.863$, which is achieved with power allocations $(x_1,x_2,x_3) = (8/15,5/15,2/15)$.  This is the solution shown in Figure \ref{fig:waterfilling}.
+\noindent We decided to solve the water-filling problem using \texttt{cvxpy} with $n=3$ channels and $(\alpha_1,\alpha_2,\alpha_3) = (0.8,1.0,1.2)$.  For simplicity we chose a dimensionless total power $P=1$.  Using these parameters, the maximum communication rate is, $\sum_{i=1}^{n}r_i = 0.863$, which is achieved with power allocations $(x_1,x_2,x_3) = (8/15,5/15,2/15)$.  This is the solution shown in Figure~\ref{fig:waterfilling}.
 
 \subsection{Example Code}
 \noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below with the parameters chosen above.  With an ordinary commercially available laptop, the time taken to execute the code was around 4ms.
@@ -167,7 +167,7 @@ We decided to solve the water-filling problem using \texttt{cvxpy} with $n=3$ ch
 \begin{figure}[H]
 \centering
 \includegraphics[width=1.0\linewidth]{water_filling_plot.pdf}
-\caption{The greatest amount of power, $x$, is allocated to the channel with the lowest $\alpha$.}
+\caption{The optimal solution to the water-filling problem allocates the greatest amount of power, $x$, to the channel with the lowest noise power, $\alpha$.}
 \label{fig:waterfilling}
 \end{figure}
 
@@ -240,11 +240,11 @@ where $\alpha$ is the pathloss coefficient and $k$ is a proportionality constant
 \end{figure}
 
 \subsection{Implementation}
-For ease of terminology, we will make a few simplifying assumptions.  First, we set the number of transmitters equal to the number of receivers, so $n=m$.  We also pair receiver $i$ to transmitter $k$ such that $i=k$.  This means that the recipient matrix $\Delta$ is the $n\times n$ identity matrix.
+\noindent For ease of terminology, we will make a few simplifying assumptions.  First, we set the number of transmitters equal to the number of receivers, so $n=m$.  We also pair receiver $i$ to transmitter $k$ such that $i=k$.  This means that the recipient matrix $\Delta$ is the $n\times n$ identity matrix.
 
 All the parameters we will take as dimensionless to give simple numbers to work with.  The maximum available power, $P_{\text{max}}$ is set to 1.  We have chosen the background noise vector $\sigma$ as constant for each receiver, with $\sigma_i = 5$.  Similarly, the receiver coefficient $A$ was set to $0.025$ for each receiver. \\ 
 
-To generate the gain matrix $G$, we randomly sample distances from a given distribution.  For paired transmitters and receivers ($k=i$), we sample $d$ from a scaled $\beta(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we sample $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.  This is illustrated in Figure \ref{fig:dist}.
+To generate the gain matrix $G$, we randomly sample distances from a given distribution.  For paired transmitters and receivers ($k=i$), we sample $d$ from a scaled $\beta(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we sample $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.  This is illustrated in Figure~\ref{fig:dist}.
 
 \begin{figure}[h!]
 \includegraphics[width=0.9\linewidth]{distance_distributions.pdf}
@@ -252,7 +252,7 @@ To generate the gain matrix $G$, we randomly sample distances from a given distr
 \end{figure}
 
 \subsection{Example code}
-For the random seed of 100 given, the optimal total power consumption is $P = 0.381$, with $p_1,p_2,p_3 = (0.139, 0.072, 0.169)$.  The time taken to find this solution was around 3ms.  Around 70\% of the simulations with these parameters have a feasible solution, with an average optimal power consumption of $P\sim0.4$.
+\noindent For the random seed of 100 given, the optimal total power consumption is $P = 0.381$, with $p_1,p_2,p_3 = (0.139, 0.072, 0.169)$.  The time taken to find this solution was around 3ms.  Around 70\% of the simulations with these parameters have a feasible solution, with an average optimal power consumption of $P\sim0.4$.
 
 \lstinputlisting[language=Python,mathescape=true,inputencoding=utf8,literate={Δ}{$\Delta$}1 {σ}{$\sigma$}1 {γ}{$\gamma$}1 {∈}{$\in$}1 ]{minimisePgivenSINR.py}
 
