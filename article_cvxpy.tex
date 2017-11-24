@@ -101,7 +101,7 @@
 \section{Introduction}
 \noindent Convexity is a fundamentally important property in optimisation. Roughly speaking, an optimisation is convex if its objective function is convex, as well the set of points satifying any constraints, and in such cases the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering applications has driven the development of software packages, such as \texttt{cvxpy} from the group of Stephen Boyd at Stanford University.
 
-Here we show that an realistic problem in communications has a convex formulation which can be easily implemented computationally using the \texttt{cvxpy}, and coded in Python. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering, and has the very useful advantage that the program structure closely mirrors the mathematical description of the problem. First let us define properly what convexity means.
+Here we show that real-world problems in communications have convex formulations which can be easily implemented computationally using \texttt{cvxpy}, and coded in Python. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering, and has the very useful advantage that the program structure closely mirrors the mathematical description of the problem. First let us define properly what convexity means.
 
 \subsection{Convex functions}
 \noindent{}If a set $C$ is \textit{convex}, then for any two points $x,y\in C$, any point $z$ along the $x,y$ line must also $\in C$ \cite[p.23]{cvxpybook}. More formally, for $x,y\in C$ and $\theta\in [0,1]$:
@@ -139,11 +139,11 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
 \subsection{Disciplined convex programming}
 \noindent In order to solve convex optimisation problems, we used \texttt{cvxpy}, a symbolic programming module for Python \cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution. 
 %Interior point methods work by applying Newton's algorithm to sequences of equally constrained problems. Is it right that Newton's method is used???
- The algorithm works by picking a step and direction to travel in the interior of the feasible convex set, such that the solution progresses towards optimality, for more details on barrier methods and primal-dual methods see \citep[p.561]{cvxpybook}.
+ The algorithm works by picking a step and direction to travel in the interior of the feasible convex set, such that the solution progresses towards optimality. For more details on barrier methods and primal-dual methods see \citep[p.561]{cvxpybook}.
  
 \section{Example 1: water-filling}
  
-\noindent{}One of the simplest problems to solve in communications with convex optimisation is the classic \textit{water-filling} problem.  Here a total power $P$ is to be assigned to $n$ different communications channels, with the objective of maximising the total communication rate.  By Shannon's theorem \citep[p.245]{cvxpybook}, an upper bound for the rate is given by $\log(1+x_i/\alpha_i)$, where $x_i$ be the power allocated to the $i$th channel and $\alpha_i$ is the noise power in that channel. This can be written as $\log(\alpha_i+x_i)-\log(\alpha_i)$ and the constants $\log(\alpha_i)$ disregarded for the purposes of maximization, and thus the communication rate $r_i$ of the $i$th channel is given by
+\noindent{}One of the simplest problems to solve in communications with convex optimisation is the classic \textit{water-filling} problem.  Here a total power $P$ is to be assigned to $n$ different communications channels, with the objective of maximising the total communication rate.  By Shannon's theorem \citep[p.245]{cvxpybook}, an upper bound for the rate is given by $\log(1+x_i/\alpha_i)$, where $x_i$ is the power allocated to the $i$th channel and $\alpha_i$ is the noise power in that channel. This can be written as $\log(\alpha_i+x_i)-\log(\alpha_i)$ and the constants $\log(\alpha_i)$ are disregarded for the purposes of maximization. Thus the communication rate, $r_i$, of the $i$th channel without the constant term is given by,
  \begin{align}
   r_i = \log(x_i+\alpha_i).
  \end{align}
@@ -172,12 +172,12 @@ This is a convex problem since $-\log(x_i+\alpha_i)$ has positive curvature with
 \end{figure}
 
 \section{Example 2: power minimisation in communications}
-\noindent To demonstrate the applicability of \texttt{cvxpy} to  a real-world example, we consider a system of $n$ transmitters each of power $p_k$, ($k=1,2,...,n$) and $m$ receivers, all in two-dimensional Euclidean space \cite{shannon1949}. At receiver $i$ there is a power $S_i$ of the desired signal, and an interference power $I_i$ from undesired signals, and a background noise $\sigma$. In this problem we are constrained to having a specified minimum signal-to-interference-plus-noise ratio (SINR or $\gamma$) at each receiver
+\noindent To demonstrate the applicability of \texttt{cvxpy} to  a real-world example, we consider a system of $n$ transmitters each of power $p_k$, ($k=1,2,...,n$) and $m$ receivers, all in two-dimensional Euclidean space \cite{shannon1949}. At receiver $i$ there is a power $S_i$ of the desired signal, an interference power $I_i$ from undesired signals, and a background noise $\sigma$. In this problem we are constrained to having a specified minimum signal-to-interference-plus-noise ratio (SINR or $\gamma_0$) at each receiver, with the SINR at receiver $i$ given by,
 \begin{equation}
 \gamma_i =\frac{S_i}{I_i+\sigma}.
 \end{equation} 
 
-How can we minimise the total power consumption, $P$, of transmitters, yet achieve this minimum SINR, $\gamma_0$, for all $i$ receivers ($i = 1,2,...,m$)? This question is relevant to telecom companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path-gain matrix, $G$, background noise level vector $\sigma$, a maximum power constraint $P_{\text{max}}$ of each transmitter and the fact that all transmitters must be supplied with positive power:
+How can we minimise the total power consumption, $P$, of the transmitters, yet achieve this minimum SINR, $\gamma_0$, for all $i$ receivers ($i = 1,2,...,m$)? This question is relevant to telecom companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path-gain matrix, $G$, background noise level vector, $\sigma$, a maximum power constraint, $P_{\text{max}}$, of each transmitter and the fact that all transmitters must be supplied with positive power:
 \begin{align*}
 &\underset{p}{\text{minimise}} \quad &&\sum_k p_k\\
 &\text{subject to} \quad &&p_k \leqslant P_{\max}\\
@@ -194,7 +194,7 @@ Supposing that we want to receive a signal at receiver $i$ from transmitter $k$,
 \end{align*}
 and our signal potential matrix $\hat{S}$ as $\hat{S} = G\Delta$.  This means that signal received at transmitter $i$ is $S_i = \hat{S}_{ik}p_k = G_{ik}p_k$.
 % The desired signal for receiver $i$ is $S_i = G_{ik}p_k$, 
-While the interference potential matrix is defined as $\hat{I} = G-\hat{S}$, giving the interference at $i$ is $I_i = (\hat{I}*p)_i = \sum_{j\neq k}G_{ij}p_j$. We must note that DCP does not allow division of the optimisation variable $p_i$, as it cannot guarantee curvature, so  
+While the interference potential matrix is defined as $\hat{I} = G-\hat{S}$, giving the interference at $i$ is $I_i = (\hat{I}*p)_i = \sum_{j\neq k}G_{ij}p_j$. We must note that DCP does not allow division of the optimisation variable, $p_i$, as it cannot guarantee curvature, so  
 \begin{equation*}
   \gamma_i \geqslant \gamma_0\Longleftrightarrow  \frac{S_i}{\sigma_i + I_i} = \frac{\hat{S}_{ik}p_k}{\sigma_i+(\hat{I}*p)_i} \geqslant \gamma_0, \quad \forall i
 \end{equation*}
@@ -205,20 +205,11 @@ is rearranged to
 which is affine, and hence a DCP function.
 
 \subsection{Path gain}
-%\noindent The path gain $G_{ij}$ represents the proportion of power that reaches receiver $i$ from transmitter $j$. Supposing that the desired signal to receiver $i$ is from transmitter $k$, the power received is,
-%\begin{equation}
-%p_{ik}^{\text{rec}} = G_{ik}p_k.
-%\end{equation}
-%Denoting the SINR at $i$ by $\gamma_i$, we have
-%\begin{equation}
-%\gamma_i = \frac{G_{ik}p_k}{\sigma_i+\sum_{j\neq k}G_{ij}p_j}
-%=\frac{S_i}{\sigma_i+I_i}.
-%\end{equation}
-\noindent In a physical context, the path gain from transmitter $j$ to receiver $i$, as shown in Fig.~\ref{fig:pathgain}, will depend on the distance $d_{ij}$ between them. Assuming isotropic propagation from each transmitter, the fraction of power from $j$ that reaches $i$ is:
+\noindent In a physical context, the path gain from transmitter $j$ to receiver $i$, as shown in Fig.~\ref{fig:pathgain}, will depend on the distance $d_{ij}$ between them. Assuming isotropic propagation from each transmitter, given a pathloss coefficient $\alpha$ and a proportionality constant $A_i$ specific to receiver $i$, the fraction of power from $j$ that reaches $i$ is,
 \begin{equation}
-G_{ij} = A_i/d_{ij}^\alpha
+G_{ij} = A_i/d_{ij}^\alpha.
 \end{equation}
-where $\alpha$ is the pathloss coefficient and $k$ is a proportionality constant specific to the receiver $i$.  For free space $\alpha = 2$, while in urban environments $\alpha \sim 3.5$ \cite{hata1980}. Further physical complexities, such as the stochastic effects from Rayleigh fading can be easily incorporated, whilst remaining within the DCP framework.
+For free space $\alpha = 2$, while in urban environments $\alpha \sim 3.5$ \cite{hata1980}. Further physical complexities, such as the stochastic effects from Rayleigh fading can be easily incorporated, whilst remaining within the DCP framework.
 
 \begin{figure}[H]
 \centering
@@ -246,31 +237,26 @@ All the parameters we will take as dimensionless to give simple numbers to work 
 
 To generate the gain matrix $G$, we randomly sample distances from a given distribution.  For paired transmitters and receivers ($k=i$), we sample $d$ from a scaled $\beta(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we sample $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.  This is illustrated in Figure~\ref{fig:dist}.
 
+\subsection{Example code}
+\noindent For the random seed of 100 shown in the example code, the optimal total power consumption is $P = 0.381$, with $p_1,p_2,p_3 = (0.139, 0.072, 0.169)$.  The time taken to find this solution was around 3ms.  Around 70\% of the simulations with these parameters have a feasible solution, with an average optimal power consumption of $P\sim0.4$.
+
 \begin{figure}[h!]
 \includegraphics[width=0.9\linewidth]{distance_distributions.pdf}
 \caption{\label{fig:dist}The distance between unpaired transmitters and receivers has a higher variance than paired ones, but on average the unpaired distances are expected to be greater.} 
 \end{figure}
-
-\subsection{Example code}
-\noindent For the random seed of 100 given, the optimal total power consumption is $P = 0.381$, with $p_1,p_2,p_3 = (0.139, 0.072, 0.169)$.  The time taken to find this solution was around 3ms.  Around 70\% of the simulations with these parameters have a feasible solution, with an average optimal power consumption of $P\sim0.4$.
 
 \lstinputlisting[language=Python,mathescape=true,inputencoding=utf8,literate={Δ}{$\Delta$}1 {σ}{$\sigma$}1 {γ}{$\gamma$}1 {∈}{$\in$}1 ]{minimisePgivenSINR.py}
 
 \section{Outlook}
 \noindent The authors hope that this article shows the utility of \texttt{cvxpy} for simple `toy' problems of real-world relevance. $\texttt{cvxpy}$ can handle problems with up to $\sim 10^3$ transmitters, however this takes $\sim 10^{4}-10^{5}\text{ms}$ to run, hence for large real-world problems a faster implementation would likely be required (e.g., a \cpp-based library). However, there is obviously a trade-off in terms of ease of understanding with these packages.
 
-We believe that $\texttt{cvxpy}$ is an invaluable resource for researchers wanting to test the applicability of convex optimisation in new fields. The module could also be easily incorporated into a course on optimisation, providing students with an accessible environment to practise techniques for convex optimisation. Full code for other communication examples can be found at \url{https://github.com/cvxgrp/cvxpy/\\tree/master/examples/communications}.
-
-%While all problems that can be written in DCP are convex, not all convex problems of interest can be written in DCP.  Over time, the library of available DCP functions in \texttt{cvxpy} has grown, increasing the scope of convex optimisation problems that \texttt{cvxpy} can solve.  This expansion of scope of \texttt{cvxpy} is ongoing, with version 1.0 under development and expected in the near future.
-
-%\section{Further Work}
-%While many problems are convex, others fall into a similar category of being \textit{quasi-convex}.  A quasi-convex function $f$ is one for which $\textbf{dom} f$ and every sublevel set of $f$ is convex.  An example of this is shown in Figure [?].  Quasi-convex problems cannot be solved directly using convex optimisation solvers, however the feasibility of a sublevel set can be checked.  This feasibility check can be used as a bisection method to find the solution.  A more thorough discussion of quasi-convex problems can be found in \cite{cvxpybook}chapter?.
+We believe that $\texttt{cvxpy}$ is an invaluable resource for researchers wanting to test the applicability of convex optimisation in new fields. The module could also be easily incorporated into a course on optimisation, providing students with an accessible environment to practise techniques for convex optimisation. Full code for other communication examples can be found at \url{https://github.com/cvxgrp/cvxpy/tree/master/examples/communications}.
 
 \subsection*{Acknowledgements}
 \noindent{}We would like to thank S.~Johnson and S.~Diamond for helpful discussions. 
 
 \subsection*{Author Biography}
-\noindent{}Robert Gowers, Sami Al-Izzi, Timothy Pollington, and Roger Hill are PhD students in the Mathematics for Real-World Systems CDT at the University of Warwick.  Keith Briggs is a esearch mathematician at BT.
+\noindent{}Robert Gowers, Sami Al-Izzi, Timothy Pollington, and Roger Hill are PhD students in the Mathematics for Real-World Systems CDT at the University of Warwick.  Keith Briggs is a research mathematician at BT.
 
 \vspace{0.2cm}
 %\section{Links \& references}
