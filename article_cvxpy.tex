@@ -137,7 +137,7 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
 \end{figure}
 
 \subsection{Disciplined convex programming}
-\noindent In order to solve convex optimisation problems, we used \texttt{cvxpy}, a symbolic programming module for Python \cite{cvxpy} (all example code is given for Python $3.0$). It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution. 
+\noindent In order to solve convex optimisation problems, we used \texttt{cvxpy}, a symbolic programming module for Python \cite{cvxpy} (all example code is given for Python 3). It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution. 
 %Interior point methods work by applying Newton's algorithm to sequences of equally constrained problems. Is it right that Newton's method is used???
  The algorithm works by picking a step and direction to travel in the interior of the feasible convex set, such that the solution progresses towards optimality. For more details on barrier methods and primal-dual methods see \citep[p.561]{cvxpybook}.
  
@@ -158,10 +158,10 @@ Noting that all power allocations must be non-negative, the optimisation problem
 This is a convex problem since $-\log(x_i+\alpha_i)$ has positive curvature within the domain $x_i \geqslant 0$, and all the constraints are affine and therefore convex.
 
 \subsection{Implementation}
-\noindent We decided to solve the water-filling problem using \texttt{cvxpy} with $n=3$ channels and $(\alpha_1,\alpha_2,\alpha_3) = (0.8,1.0,1.2)$.  For simplicity we chose a dimensionless total power $P=1$.  Using these parameters, the maximum communication rate is, $\sum_{i=1}^{n}r_i = 0.863$, which is achieved with power allocations $(x_1,x_2,x_3) = (8/15,5/15,2/15)$.  This solution is shown in Figure~\ref{fig:waterfilling}, and can be seen as being analogous to filling an uneven basin to a constant level (hence the name \textit{water-filling}).
+\noindent We decided to solve the water-filling problem using \texttt{cvxpy} with $n=3$ channels and $(\alpha_1,\alpha_2,\alpha_3) = (4/5,1,6/5)$.  For simplicity we chose a dimensionless total power $P=1$.  Using these parameters, the maximum communication rate is, $\sum_{i=1}^{n}r_i = 0.863$, which is achieved with power allocations $(x_1,x_2,x_3) = (8/15,5/15,2/15)$.  This solution is shown in Figure~\ref{fig:waterfilling}, and can be seen as being analogous to filling an uneven basin to a constant level (hence the name \textit{water-filling}).
 
 \subsection{Example Code}
-\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below with the parameters chosen above.  With an ordinary commercially available laptop, the time taken to execute the code was around 4ms. Note that the code is a little different in formulation from the text in that it maximises the positive sum of $x_i$ rather than minimising the negative. The total power constraint is also rearranged.
+\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below with the parameters chosen above.  With an ordinary commercially available laptop, the time taken to execute the code was around 4ms. Note that the code is a little different in formulation from the text in that it maximises $\sum_{i}^nr_i$ rather than minimising $\sum_{i}^{n}-r_i$. The total power constraint is also rearranged to: $\sum_i^nx_i - P = 0$.
 \lstinputlisting[language=Python,mathescape=true,inputencoding=utf8,literate={α}{$\alpha$}1 ]{waterfilling.py}
 
 \begin{figure}[H]
@@ -177,7 +177,7 @@ This is a convex problem since $-\log(x_i+\alpha_i)$ has positive curvature with
 \gamma_i =\frac{S_i}{I_i+\sigma_i}.
 \end{equation} 
 
-How can we minimise the total power consumption, $P$, of the transmitters, yet achieve this minimum SINR, $\gamma_0$, for all $i$ receivers ($i = 1,2,...,m$)? This question is relevant to telecom companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path-gain matrix, $G$, background noise level vector, $\sigma$, a maximum power constraint, $P_{\text{max}}$, of each transmitter and the fact that all transmitters must be supplied with positive power:
+How can we minimise the total power consumption, $P$, of the transmitters, yet achieve this minimum SINR, $\gamma_0$, for all $i$ receivers ($i = 1,2,...,m$)? This question is relevant to telecom companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path-gain matrix, $G$, background noise level vector, $\boldsymbol{\sigma} = (\sigma_1, \sigma_2, ..., \sigma_i, ..., \sigma_m)$, a maximum power constraint, $P_{\text{max}}$, of each transmitter and the fact that all transmitters must be supplied with positive power:
 \begin{align*}
 &\underset{p}{\text{minimise}} \quad &&\sum_k p_k\\
 &\text{subject to} \quad &&p_k \leqslant P_{\max}\\
@@ -233,7 +233,7 @@ For free space $\alpha = 2$, while in urban environments $\alpha \sim 3.5$ \cite
 \subsection{Implementation}
 \noindent For ease of terminology, we will make a few simplifying assumptions.  First, we set the number of transmitters equal to the number of receivers, so $n=m$.  We also pair receiver $i$ to transmitter $k$ such that $i=k$.  This means that the recipient matrix $\Delta$ is the $n\times n$ identity matrix.
 
-All the parameters we will take as dimensionless to give simple numbers to work with.  The maximum available power, $P_{\text{max}}$ is set to 1.  We have chosen the background noise vector $\sigma$ as constant for each receiver, with $\sigma_i = 5$.  Similarly, the receiver coefficient $A$ was set to $0.025$ for each receiver. \\ 
+All the parameters we will take as dimensionless to give simple numbers to work with.  The maximum available power, $P_{\text{max}}$ is set to 1.  We have chosen the background noise vector $\boldsymbol{\sigma}$ as constant for each receiver, with $\sigma_i = 5$.  Similarly, the receiver coefficient $A$ was set to $0.025$ for each receiver. \\ 
 
 To generate the gain matrix $G$, we randomly sample distances from a given distribution.  For paired transmitters and receivers ($k=i$), we sample $d$ from a scaled $\beta(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we sample $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.  This is illustrated in Figure~\ref{fig:dist}.
 
