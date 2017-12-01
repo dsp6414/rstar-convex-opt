@@ -1,30 +1,23 @@
 \begin{thebibliography}{1}
 
 \bibitem{cvxpybook}
-Steven Boyd and L~Vandenberghe.
-\newblock {Convex Optimization}.
-\newblock \url{http://stanford.edu/~boyd/cvxbook}, 2004.
-
-\bibitem{dcp}
-S.~Diamond.
-\newblock Stanford dcp analyzer.
-\newblock \url{http://dcp.stanford.edu/analyzer}.
+S.~Boyd and L.~Vandenberghe, ``{Convex Optimization}.''
+  \url{http://stanford.edu/~boyd/cvxbook}, 2004.
 
 \bibitem{cvxpy}
-S~Diamond and S~Boyd.
-\newblock {CVXPY}: A {P}ython-embedded modeling language for convex
-  optimization.
-\newblock \url{www.cvxpy.org}.
+S.~Diamond and S.~Boyd, ``{CVXPY}: A {P}ython-embedded modeling language for
+  convex optimization.'' \url{www.cvxpy.org}.
 
-\bibitem{hata1980}
-Masaharu Hata.
-\newblock Empirical formula for propagation loss in land mobile radio services.
-\newblock {\em Vehicular Technology, IEEE Transactions on}, 29(3):317--325,
-  1980.
+\bibitem{dcp}
+S.~Diamond, ``Stanford dcp analyzer.'' \url{http://dcp.stanford.edu/analyzer}.
 
 \bibitem{shannon1949}
-Claude~E. Shannon and Warren Weaver.
-\newblock {\em The mathematical theory of communication}.
+C.~E. Shannon and W.~Weaver, {\em The mathematical theory of communication}.
 \newblock University of Illinois Press, 1949.
+
+\bibitem{hata1980}
+M.~Hata, ``Empirical formula for propagation loss in land mobile radio
+  services,'' {\em Vehicular Technology, IEEE Transactions on}, vol.~29, no.~3,
+  pp.~317--325, 1980.
 
 \end{thebibliography}

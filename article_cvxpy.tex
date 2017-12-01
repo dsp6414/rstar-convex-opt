@@ -104,7 +104,7 @@
 Here we show that real-world problems in communications have convex formulations which can be easily implemented computationally using \texttt{cvxpy}, and coded in Python. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering, and has the very useful advantage that the program structure closely mirrors the mathematical description of the problem. First let us define properly what convexity means.
 
 \subsection{Convex functions}
-\noindent{}If a set $C$ is \textit{convex}, then for any two points $x,y\in C$, any point $z$ along the $x,y$ line must also $\in C$ \cite[p.23]{cvxpybook}. More formally, for $x,y\in C$ and $\theta\in [0,1]$:
+\noindent{}If a set $C$ is \textit{convex}, then for any two points $x,y\in C$, any point $z$ along the $x,y$ line must also be in $C$ \cite[p.23]{cvxpybook}. More formally, for $x,y\in C$ and $\theta\in [0,1]$:
 \begin{align}
 \theta x + (1-\theta)y\in C.
 \end{align}
@@ -137,7 +137,7 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
 \end{figure}
 
 \subsection{Disciplined convex programming}
-\noindent In order to solve convex optimisation problems, we used \texttt{cvxpy}, a symbolic programming module for Python \cite{cvxpy}. It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution. 
+\noindent In order to solve convex optimisation problems, we used \texttt{cvxpy}, a symbolic programming module for Python \cite{cvxpy} (all example code is given for Python $3.0$). It uses a set of rules, called \textit{disciplined convex programming} (DCP), to determine whether a function is convex. This is implemented using predefined classes containing functions with their curvature and sign, and using general composition theorems from convex analysis \cite{dcp}. If DCP rules can be applied then interior point methods guarantee an optimal solution. 
 %Interior point methods work by applying Newton's algorithm to sequences of equally constrained problems. Is it right that Newton's method is used???
  The algorithm works by picking a step and direction to travel in the interior of the feasible convex set, such that the solution progresses towards optimality. For more details on barrier methods and primal-dual methods see \citep[p.561]{cvxpybook}.
  
@@ -147,7 +147,7 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
  \begin{align}
   r_i = \log(x_i+\alpha_i).
  \end{align}
-This can be seen in Figure~\ref{fig:waterfilling} as being analogous to filling an uneven basin to a constant level (hence the name \textit{water-filling}).
+
  
 Noting that all power allocations must be non-negative, the optimisation problem can therefore be formulated as,
  \begin{align}
@@ -158,10 +158,10 @@ Noting that all power allocations must be non-negative, the optimisation problem
 This is a convex problem since $-\log(x_i+\alpha_i)$ has positive curvature within the domain $x_i \geqslant 0$, and all the constraints are affine and therefore convex.
 
 \subsection{Implementation}
-\noindent We decided to solve the water-filling problem using \texttt{cvxpy} with $n=3$ channels and $(\alpha_1,\alpha_2,\alpha_3) = (0.8,1.0,1.2)$.  For simplicity we chose a dimensionless total power $P=1$.  Using these parameters, the maximum communication rate is, $\sum_{i=1}^{n}r_i = 0.863$, which is achieved with power allocations $(x_1,x_2,x_3) = (8/15,5/15,2/15)$.  This is the solution shown in Figure~\ref{fig:waterfilling}.
+\noindent We decided to solve the water-filling problem using \texttt{cvxpy} with $n=3$ channels and $(\alpha_1,\alpha_2,\alpha_3) = (0.8,1.0,1.2)$.  For simplicity we chose a dimensionless total power $P=1$.  Using these parameters, the maximum communication rate is, $\sum_{i=1}^{n}r_i = 0.863$, which is achieved with power allocations $(x_1,x_2,x_3) = (8/15,5/15,2/15)$.  This solution is shown in Figure~\ref{fig:waterfilling}, and can be seen as being analogous to filling an uneven basin to a constant level (hence the name \textit{water-filling}).
 
 \subsection{Example Code}
-\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below with the parameters chosen above.  With an ordinary commercially available laptop, the time taken to execute the code was around 4ms.
+\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below with the parameters chosen above.  With an ordinary commercially available laptop, the time taken to execute the code was around 4ms. Note that the code is a little different in formulation from the text in that it maximises the positive sum of $x_i$ rather than minimising the negative. The total power constraint is also rearranged.
 \lstinputlisting[language=Python,mathescape=true,inputencoding=utf8,literate={α}{$\alpha$}1 ]{waterfilling.py}
 
 \begin{figure}[H]
@@ -172,9 +172,9 @@ This is a convex problem since $-\log(x_i+\alpha_i)$ has positive curvature with
 \end{figure}
 
 \section{Example 2: power minimisation in communications}
-\noindent To demonstrate the applicability of \texttt{cvxpy} to  a real-world example, we consider a system of $n$ transmitters each of power $p_k$, ($k=1,2,...,n$) and $m$ receivers, all in two-dimensional Euclidean space \cite{shannon1949}. At receiver $i$ there is a power $S_i$ of the desired signal, an interference power $I_i$ from undesired signals, and a background noise $\sigma$. In this problem we are constrained to having a specified minimum signal-to-interference-plus-noise ratio (SINR or $\gamma_0$) at each receiver, with the SINR at receiver $i$ given by,
+\noindent To demonstrate the applicability of \texttt{cvxpy} to  a real-world example, we consider a system of $n$ transmitters each of power $p_k$, ($k=1,2,...,n$) and $m$ receivers, all in two-dimensional Euclidean space \cite{shannon1949}. At receiver $i$ there is a power $S_i$ of the desired signal, an interference power $I_i$ from undesired signals, and a background noise $\sigma_i$. In this problem we are constrained to having a specified minimum signal-to-interference-plus-noise ratio (SINR or $\gamma_0$) at each receiver, with the SINR at receiver $i$ given by,
 \begin{equation}
-\gamma_i =\frac{S_i}{I_i+\sigma}.
+\gamma_i =\frac{S_i}{I_i+\sigma_i}.
 \end{equation} 
 
 How can we minimise the total power consumption, $P$, of the transmitters, yet achieve this minimum SINR, $\gamma_0$, for all $i$ receivers ($i = 1,2,...,m$)? This question is relevant to telecom companies who want to offer a service at a minimum quality standard. We formulate the problem with a given square path-gain matrix, $G$, background noise level vector, $\sigma$, a maximum power constraint, $P_{\text{max}}$, of each transmitter and the fact that all transmitters must be supplied with positive power:
@@ -194,7 +194,7 @@ Supposing that we want to receive a signal at receiver $i$ from transmitter $k$,
 \end{align*}
 and our signal potential matrix $\hat{S}$ as $\hat{S} = G\Delta$.  This means that signal received at transmitter $i$ is $S_i = \hat{S}_{ik}p_k = G_{ik}p_k$.
 % The desired signal for receiver $i$ is $S_i = G_{ik}p_k$, 
-While the interference potential matrix is defined as $\hat{I} = G-\hat{S}$, giving the interference at $i$ is $I_i = (\hat{I}*p)_i = \sum_{j\neq k}G_{ij}p_j$. We must note that DCP does not allow division of the optimisation variable, $p_i$, as it cannot guarantee curvature, so  
+While the interference potential matrix is defined as $\hat{I} = G-\hat{S}$, giving the interference at $i$ as $I_i = (\hat{I}*p)_i = \sum_{j\neq k}G_{ij}p_j$. We must note that DCP does not allow division of the optimisation variable, $p_i$, as it cannot guarantee curvature, so  
 \begin{equation*}
   \gamma_i \geqslant \gamma_0\Longleftrightarrow  \frac{S_i}{\sigma_i + I_i} = \frac{\hat{S}_{ik}p_k}{\sigma_i+(\hat{I}*p)_i} \geqslant \gamma_0, \quad \forall i
 \end{equation*}
@@ -260,8 +260,9 @@ We believe that $\texttt{cvxpy}$ is an invaluable resource for researchers wanti
 
 \vspace{0.2cm}
 %\section{Links \& references}
+\bibliographystyle{ieeetr}
 \bibliography{articleBib} 
-\bibliographystyle{plain}
+
 
 %\item DCP analyser http://dcp.stanford.edu/analyzer
 % -----
