@@ -1,9 +1,12 @@
-import matplotlib
+import matplotlib as mp
 import matplotlib.pylab as plt
 import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
 
-matplotlib.rcParams.update({'font.size': 14})
+# mp.rc('font', family = 'serif', serif = 'cmr10')
+mp.rcParams['mathtext.fontset'] = 'cm'
+mp.rcParams.update({'font.size': 16})
+
 n=3
 α = np.array([0.8,1.0,1.2])
 X = np.array([8/15,5/15,2/15])
@@ -24,6 +27,6 @@ with PdfPages('water_filling_plot.pdf') as pdf:
 	plt.step(axis,A,where='post',label =r'$\alpha$',lw=2)
 	plt.step(axis,Y,where='post',label=r'$\alpha + x$',lw=2)
 	plt.legend(loc='lower right')
-	plt.xlabel('Channel Number')
-	plt.ylabel('Power Level')
+	plt.xlabel('channel number')
+	plt.ylabel('power level')
 	pdf.savefig(bbox_inches='tight')
