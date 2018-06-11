@@ -99,7 +99,7 @@
 	\NewsAuthor{Leonhard Euler (1707-1783)}
     
 \section{Introduction}
-\noindent Convexity is a fundamentally important property in optimisation. Roughly speaking, an optimisation is convex if its objective function is convex, as well the set of points satifying any constraints, and in such cases the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering applications has driven the development of software packages, such as \texttt{cvxpy} from the group of Stephen Boyd at Stanford University.
+\noindent Convexity is a fundamentally important property in optimisation. Roughly speaking, an optimisation problem is convex if its objective function is convex, as well the set of points satifying any constraints, and in such cases the task of finding a global minimum is reduced to that of finding a local minimum. The importance of finding these minima efficiently in science and engineering applications has driven the development of software packages, such as \texttt{cvxpy} from the group of Stephen Boyd at Stanford University.
 
 Here we show that real-world problems in communications have convex formulations which can be easily implemented computationally using \texttt{cvxpy}, and coded in Python. This demonstrates \texttt{cvxpy} as an invaluable tool for both students and researchers in many areas of science and engineering, and has the very useful advantage that the program structure closely mirrors the mathematical description of the problem. First let us define properly what convexity means.
 
@@ -133,7 +133,7 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
 
 \begin{figure}[h!]
 \includegraphics[width=0.9\linewidth]{convex_function.pdf}
-\caption{\label{fig:convex}The function $f(x)=x^4$ is plotted in blue. The convexity of this function can be seen by picking any two values of $x$ and noting that $f(x)$ will always lie below or on the chord connecting these two points.} 
+\caption{\label{fig:convex}The function $f(x)=x^4$ is plotted in blue. The convexity of this function can be seen by picking any two values of $x$ and noting that $f(x)$ will always lie below or on the orange chord connecting these two points.} 
 \end{figure}
 
 \subsection{Disciplined convex programming}
@@ -145,23 +145,23 @@ Any local optimum $x^*$ for a convex optimisation problem is also a global optim
  
 \noindent{}One of the simplest problems to solve in communications with convex optimisation is the classic \textit{water-filling} problem.  Here a total power $P$ is to be assigned to $n$ different communications channels, with the objective of maximising the total communication rate.  By Shannon's theorem \citep[p.245]{cvxpybook}, an upper bound for the rate is given by $\log(1+x_i/\alpha_i)$, where $x_i$ is the power allocated to the $i$th channel and $\alpha_i$ is the noise power in that channel. This can be written as $\log(\alpha_i+x_i)-\log(\alpha_i)$ and the constants $\log(\alpha_i)$ are disregarded for the purposes of maximization. Thus the communication rate, $r_i$, of the $i$th channel without the constant term is given by,
  \begin{align}
-  r_i = \log(x_i+\alpha_i).
+  r_i = \log(\alpha_i+x_i).
  \end{align}
 
  
 Noting that all power allocations must be non-negative, the optimisation problem can therefore be formulated as,
  \begin{align}
-\text{minimise} \quad  -&\sum_{i=1}^{n} \log(x_i+\alpha_i) \nonumber \\
+\text{minimise} \quad  -&\sum_{i=1}^{n} \log(\alpha_i+x_i) \nonumber \\
 \text{subject to} \quad &x_i \geqslant 0, \quad \forall i \nonumber \\
 &\sum_{i=1}^{n}x_i = P.
  \end{align}
-This is a convex problem since $-\log(x_i+\alpha_i)$ has positive curvature within the domain $x_i \geqslant 0$, and all the constraints are affine and therefore convex.
+This is a convex problem since $-\log(\alpha_i+x_i)$ has positive curvature within the domain $x_i \geqslant 0$, and all the constraints are affine and therefore convex.
 
 \subsection{Implementation}
 \noindent We decided to solve the water-filling problem using \texttt{cvxpy} with $n=3$ channels and $(\alpha_1,\alpha_2,\alpha_3) = (4/5,1,6/5)$.  For simplicity we chose a dimensionless total power $P=1$.  Using these parameters, the maximum communication rate is, $\sum_{i=1}^{n}r_i = 0.863$, which is achieved with power allocations $(x_1,x_2,x_3) = (8/15,5/15,2/15)$.  This solution is shown in Figure~\ref{fig:waterfilling}, and can be seen as being analogous to filling an uneven basin to a constant level (hence the name \textit{water-filling}).
 
 \subsection{Example Code}
-\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below with the parameters chosen above.  With an ordinary commercially available laptop, the time taken to execute the code was around 4ms. Note that the code is a little different in formulation from the text in that it maximises $\sum_{i}^nr_i$ rather than minimising $\sum_{i}^{n}-r_i$. The total power constraint is also rearranged to: $\sum_i^nx_i - P = 0$.
+\noindent To indicate the brevity of code implementation in \texttt{cvxpy} we show a minimal working example below with the parameters chosen above.  With an ordinary commercially-available laptop, the time taken to execute the code was around 4ms. Note that the code is a little different in formulation from the text in that it maximises $\sum_{i}^nr_i$ rather than minimising $-\sum_{i}^{n}r_i$. The total power constraint is also rearranged to: $\sum_i^nx_i - P = 0$.
 \lstinputlisting[language=Python,mathescape=true,inputencoding=utf8,literate={α}{$\alpha$}1 ]{waterfilling.py}
 
 \begin{figure}[H]
@@ -209,7 +209,7 @@ which is affine, and hence a DCP function.
 \begin{equation}
 G_{ij} = A_i/d_{ij}^\alpha.
 \end{equation}
-For free space $\alpha = 2$, while in urban environments $\alpha \sim 3.5$ \cite{hata1980}. Further physical complexities, such as the stochastic effects from Rayleigh fading can be easily incorporated, whilst remaining within the DCP framework.
+For free space $\alpha = 2$, while in urban environments $\alpha \approx 3.5$ \cite{hata1980}. Further physical complexities, such as the stochastic effects from Rayleigh fading can be easily incorporated, whilst remaining within the DCP framework.
 
 \begin{figure}[H]
 \centering
@@ -235,10 +235,10 @@ For free space $\alpha = 2$, while in urban environments $\alpha \sim 3.5$ \cite
 
 All the parameters we will take as dimensionless to give simple numbers to work with.  The maximum available power, $P_{\text{max}}$ is set to 1.  We have chosen the background noise vector, $\boldsymbol{\sigma}$, as constant for each receiver, with $\sigma_i = 5$.  Similarly, the receiver coefficient, $A_i$, was set to $0.025$ for each receiver. \\ 
 
-To generate the gain matrix, $G$, we randomly sample distances from a given distribution.  For paired transmitters and receivers ($k=i$), we sample $d$ from a scaled $\beta(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we sample $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.  This is illustrated in Figure~\ref{fig:dist}.
+To generate the gain matrix, $G$, we randomly sample distances from a given distribution.  For paired transmitters and receivers ($k=i$), we sample $d$ from a scaled $\text{Beta}(2,2)$ distribution, such that $d_{ii} \sim 0.2\times\text{Beta}(2,2)$.  For unpaired transmitters and receivers ($k\neq i$), we sample $d$ from a uniform distribution, such that $d_{ik} \sim \text{Uniform}(0,1)$.  This is illustrated in Figure~\ref{fig:dist}.
 
 \subsection{Example code}
-\noindent For the random seed of 100 shown in the example code, the optimal total power consumption is $P = 0.381$, with $p_1,p_2,p_3 = (0.139, 0.072, 0.169)$.  The time taken to find this solution was around 3ms.  Around 70\% of the simulations with these parameters have a feasible solution, with an average optimal power consumption of $P\sim0.4$.
+\noindent For the random seed of 100 shown in the example code, the optimal total power consumption is $P = 0.381$, with $(p_1,p_2,p_3) = (0.139, 0.072, 0.169)$.  The time taken to find this solution was around 3ms.  Around 70\% of the simulations with these parameters have a feasible solution, with an average optimal power consumption of $P\approx0.4$.
 
 \begin{figure}[h!]
 \includegraphics[width=0.9\linewidth]{distance_distributions.pdf}
@@ -248,12 +248,12 @@ To generate the gain matrix, $G$, we randomly sample distances from a given dist
 \lstinputlisting[language=Python,mathescape=true,inputencoding=utf8,literate={Δ}{$\Delta$}1 {σ}{$\sigma$}1 {γ}{$\gamma$}1 {∈}{$\in$}1 ]{minimisePgivenSINR.py}
 
 \section{Outlook}
-\noindent The authors hope that this article shows the utility of \texttt{cvxpy} for simple `toy' problems of real-world relevance. $\texttt{cvxpy}$ can handle problems with up to $\sim 10^3$ transmitters, however this takes $\sim 10^{4}-10^{5}\text{ms}$ to run, hence for large real-world problems a faster implementation would likely be required (e.g., a \cpp-based library). However, there is obviously a trade-off in terms of ease of understanding with these packages.
+\noindent The authors hope that this article shows the utility of \texttt{cvxpy} for simple `toy' problems of real-world relevance. $\texttt{cvxpy}$ can handle problems with up to $\sim 10^3$ transmitters, however as this takes $\sim 10^{4}-10^{5}\text{ms}$ to run on a modern laptop, for very large real-world problems faster solvers and more computation power would be required.  Nevertheless, one can solve convex optimisation problems with open-source software, modest computational resources and easily understood code with $\texttt{cvxpy}$.  %a faster implementation would likely be required (e.g., a \cpp-based library). However, there is obviously a trade-off in terms of ease of understanding with these packages.
 
 We believe that $\texttt{cvxpy}$ is an invaluable resource for researchers wanting to test the applicability of convex optimisation in new fields. The module could also be easily incorporated into a course on optimisation, providing students with an accessible environment to practise techniques for convex optimisation. Full code for other communication examples can be found at \url{https://github.com/cvxgrp/cvxpy/tree/master/examples/communications}.
 
 \subsection*{Acknowledgements}
-\noindent{}We would like to thank S.~Johnson and S.~Diamond for helpful discussions. 
+\noindent{}We would like to thank Samuel Johnson (University of Birmingham) and Steven Diamond (Stanford University) for helpful discussions, and the EPSRC and MRC for funding the University of Warwick Mathematics for Real-World Systems CDT (reference EP/L015374/1).
 
 \subsection*{Author Biography}
 \noindent{}Robert Gowers, Sami Al-Izzi, Timothy Pollington, and Roger Hill are PhD students in the Mathematics for Real-World Systems CDT at the University of Warwick.  Keith Briggs is a research mathematician at BT.

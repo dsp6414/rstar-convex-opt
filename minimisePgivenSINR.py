@@ -12,7 +12,7 @@ d_unpair = np.random.rand(n,n)
 # desired transmitters d∈0.2B[2,2] from receivers
 d_pair = np.random.beta(2,2,size=n)*0.20 
  # make the matrix symmetric
-d = np.tril(d_unpair) + np.tril(d_unpair, -1).T-np.diag(d_unpair)*Δ+d_pair*Δ
+d = np.tril(d_unpair) + np.tril(d_unpair, -1).T-np.diag(d_unpair)*Δ + d_pair*Δ
 
 G = np.zeros((n,n)) # gain matrix G
 G = A / d ** 3.5
@@ -20,7 +20,7 @@ S_hat = G * Δ # signal potential matrix
 I_hat = G - S_hat # interference potential matrix
 
 σ = 5.0 * np.ones(n)
-γ = 1.0 # minimimum acceptable SINR
+γ = 1.0 # minimum acceptable SINR
 Pmax = 1.0 # total power for each transmitter
 
 # Define optimisation variable as the transmitter powers
