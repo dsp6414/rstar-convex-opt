@@ -1,0 +1,6 @@
+List of changes made to cvxpy article:
+
+- Introduction, paragraph 1, added "problem" after optimisation.
+- Figure 1, changed added the word "orange" before "chord" in caption text.
+
+
