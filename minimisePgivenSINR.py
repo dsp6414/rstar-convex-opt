@@ -27,7 +27,7 @@ Pmax = 1.0 # total power for each transmitter
 p = cvx.Variable(n)
 
 # Define objective function as the total power
-obj = cvx.Minimize(cvx.sum_entries(p))
+obj = cvx.Minimize(cvx.sum(p))
 
 # Define constraints
 constraints = [p >= 0,
