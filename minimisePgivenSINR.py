@@ -42,5 +42,6 @@ powers = np.asarray(p.value)
 print('Solution status = {0}'.format(prob.status))
 print('Optimal solution = {0:.3f}'.format(prob.value))
 if prob.status == 'optimal':
+  #print(powers[0])
   for j in range(n):
-  	print('Power {0} = {1:.3f}'.format(j,powers[j][0]))
+  	print('Power {0} = {1:.3f}'.format(j,powers[j]))
